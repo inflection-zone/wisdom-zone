@@ -15,5 +15,5 @@ Knowledgebase repository meant for documenting the
 
 ## Blogs, Cookbooks, Cheat-sheets and snippets...
 
-* [Data Science] (data-science/readme.md)
-* [Platform Engineering] (platform-engineering/readme.md)
+* [Data Science](data-science/readme.md)
+* [Platform Engineering](platform-engineering/readme.md)
