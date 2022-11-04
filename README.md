@@ -10,7 +10,10 @@ Knowledgebase repository meant for documenting the
 * successes, 
 * solutions,
 * workarounds and 
-* any sound wisdom we came across.
+* any sound wisdom
+ we came across.
+
+## Blogs, Cookbooks, Cheat-sheets and snippets...
 
 * [Data Science] (data-science/readme.md)
 * [Platform Engineering] (platform-engineering/readme.md)
