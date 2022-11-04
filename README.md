@@ -1,4 +1,8 @@
 # zone-knowledge-base
+
+ [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+ Opensourced under  [MIT license](./LICENSE).
+ 
 Knowledgebase repository meant for documenting the 
 * learnings, 
 * experimentation, 
@@ -7,3 +11,6 @@ Knowledgebase repository meant for documenting the
 * solutions,
 * workarounds and 
 * any sound wisdom we came across.
+
+* [Data Science] (data-science/readme.md)
+* [Platform Engineering] (platform-engineering/readme.md)
