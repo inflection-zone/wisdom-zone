@@ -13,7 +13,7 @@ Knowledgebase repository meant for documenting the
 * any sound wisdom
  we came across.
 
-## Blogs, Cookbooks, Cheat-sheets and snippets...
+## Blogs, mini-cookbooks, how-to-guides and snippets...
 
 * [Data Science](data-science/readme.md)
 * [Platform Engineering](platform-engineering/readme.md)
