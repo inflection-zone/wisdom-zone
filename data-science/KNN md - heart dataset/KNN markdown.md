@@ -15,6 +15,23 @@ Example: Here we have chosen k to be 3 and thus, based on the majority of votes,
 ---
 We can understand this concept more with the help of a heart related dataset. This dataset can be found on kaggle: https://www.kaggle.com/datasets/nareshbhat/health-care-data-set-on-heart-attack-possibility
 
+But first we need to import the dependencies:
+
+### Importing dependencies
+
+```python
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
+from sklearn.metrics import confusion_matrix
+
+from sklearn.neighbors import KNeighborsClassifier
+```
 
 The dataset looks like this:
 
@@ -51,7 +68,7 @@ plt.show()
 This plot shows that the range of the data in this dataset is quite uneven and there is an outlier in the cholestrol feature but in case of medical records, removing an outlier observation is not a good idea.
 
 ---
-### Scaling the data
+### Feature Scaling
 
 Since KNN algorithm, relies on distance for classification if the features show a vast difference in range of data (eg. age and cholestrol) sometimes due to their units, then normalizing and scaling the training data can improve accuracy dramatically.
 
