@@ -87,9 +87,9 @@ df.loc[df['chol']==df['chol'].max()]
 df.drop(85, axis = 0, inplace = True)
 ```
 ---
-### Scaling the data
+### Feature Scaling
 
-Since KNN algorithm, relies on distance for classification if the features show a vast difference in range of data (eg. age and cholestrol) sometimes due to their units, then normalizing and scaling the training data can improve accuracy dramatically.
+SVM tries to maximize the distance between the separating plane and the support vectors. If one feature (i.e. one dimension in this space) has very large values, it will dominate the other features when calculating the distance. If we rescale all features in a certain range, they all have the same influence on the distance metric and thus, improve the accuracy of the algorithm dramatically.
 
 ```python
 X = df.drop(columns = 'target')
