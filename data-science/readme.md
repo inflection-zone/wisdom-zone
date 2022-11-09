@@ -2,3 +2,4 @@
 
 * [KNN on heart dataset](./KNN%20md%20-%20heart%20dataset/KNN%20markdown.md)
 * [SVM on heart dataset](./SVM%20md%20-%20heart%20dataset/SVM%20markdown.md)
+* [Random Forest on heart dataset](./Random%20Forest%20md%20-%20heart%20dataset/Random%20Forest%20markdown.md)

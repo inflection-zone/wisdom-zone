@@ -135,7 +135,7 @@ print(classification_report(y_test, model.predict(X_test)))
 #### Confusion matrix
 
 ```Python
-cm = confusion_matrix(y_test, knn.predict(X_test))
+cm = confusion_matrix(y_test, model.predict(X_test))
 sns.heatmap(cm, annot = True, cmap = 'Blues')
 ```
 
