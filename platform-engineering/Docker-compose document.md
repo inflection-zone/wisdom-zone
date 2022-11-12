@@ -15,6 +15,60 @@
 * Step 5: Create a docker-compose file with yaml OR yml extension.(eg. docker-compose.yaml OR docker-compose.yml)
     (https://www.youtube.com/watch?v=_JNTTgRDyBQ One can refer this video tutorial for creating & running docker compose file for node.js app using mysql database.)
 
+``` 
+services:
+  mysqldb:
+    image: mysql:8.0
+    container_name: mysqlcontainer
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    volumes:
+      - ./dbinit/init.sql:/docker-entrypoint-initdb.d/0_init.sql
+      - $HOME/database:/var/lib/mysql
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+    environment:
+      MYSQL_DATABASE: schooldb
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: letmein
+      MYSQL_ROOT_PASSWORD: letmein
+      SERVICE_TAGS: prod
+      SERVICE_NAME: mysqldb
+    networks:
+      - internalnet
+
+  nodeapp:
+    container_name: school-service-container
+    build: .
+    image: school-service:1.0
+    volumes:
+      - $HOME/nodeapp:/code
+    ports:
+      - 3000:3000
+    expose:
+      - 3000
+    environment:
+      DB_HOST: mysqldb
+      DB_PORT: 3306
+      DB_USER: admin
+      DB_PASSWORD: letmein
+      DB_NAME: schooldb
+      DB_CONNECTION_LIMIT: 20
+      SERVICE_TAGS: prod
+      SERVICE_NAME: school-service
+      SERVER_PORT: 3000
+    depends_on:
+      - mysqldb
+    networks:
+      - internalnet
+networks:
+  internalnet:
+    driver: bridge
+  ``` 
+    
+
 * Step 6: Go to .env file and change database configuration variable values according to your docker-compose file.
 
 * Step 7: Open terminal insde your service folder. Write command ```docker-compose up --build```.
