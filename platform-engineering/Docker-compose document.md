@@ -1,19 +1,21 @@
 # Deploy service to Docker using docker-compose:
 
-* STEP 1: Create a service with APIs.
+##Steps
 
-* Step 2: Make sure your service is running successfully on local system.
+1. Create a service with APIs.
 
-* Step 3: Download & install docker on your system.
+2. Make sure your service is running successfully on local system.
+
+3. Download & install docker on your system.
 
 * Step 4: Create a Dockerfile inside your service folder with name "Dockerfile":
   (https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
   * Click on create new file.
   * Name it as "Dockerfile".
   * Add VS Code suggested extension for Docker.
-  
+
   An example of a Dockerfile is given below:
-  
+
 ```
 FROM node:19-alpine3.16 AS builder
 ADD . /app
@@ -46,10 +48,10 @@ CMD ["npm","run","start"]
 
 * Step 5: Create a docker-compose file with yaml OR yml extension.(eg. docker-compose.yaml OR docker-compose.yml)
     (https://www.youtube.com/watch?v=_JNTTgRDyBQ One can refer this video tutorial for creating & running docker compose file for node.js app using mysql database.)
-    
+
     Example of a docker-compose file:
 
-``` 
+```
 services:
   mysqldb:
     image: mysql:8.0
@@ -100,8 +102,8 @@ services:
 networks:
   internalnet:
     driver: bridge
-  ``` 
-    
+  ```
+
 
 * Step 6: Go to .env file and change database configuration variable values according to your docker-compose file.
 
