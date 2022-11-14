@@ -193,6 +193,7 @@ networks:
 <img src="mysqlcontainer.png" width="600"/>
 
 12. Send API requests from postman and you can see changes in database in container as well.
-    <img src="postman.png" width="600"/>
+
+<img src="postman.png" width="600"/>
 
 <img src="containerResponse.png" width="600"/>
