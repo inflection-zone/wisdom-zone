@@ -13,12 +13,12 @@
   - Consider developing an application having various technologies like node.js based webserver, database like mysql or mongodb, communication systems like messaging and many more. We need to face different issues while developing such an application stack with these different components.
   - First, their compatibilty with the undelying OS is the issue. We need to ensure that all these components are compatible with the version of OS we are planning to use. Many times this compatibility issue occurs & we need to go back and look for different OS version which will be compatible with the services we are using.
   - Second, we need to check compatibility between the services and libraries & dependancies on the OS. The architecture of our application will change over the time & we have to update to newer versions of these services or change the databases. And every time something changed we have to go through same process to check compatibility of these components with undelying infrastructure.
-  - Third, every time if we have a new developer in the team,it will be very difficult & time consuming to set up new environment. The developer will have to follow large set of instructions & hundred of commands to finnaly set up the environment. Also we need to make sure he is using right OS & right versions of all the components. We would not guarantee that the application we are building will run the same way in different environments.
-  - All these issues will make developing, building & shiiping an application very difficult. So here comes Docker to the rescue.
+  - Third, every time if we have a new developer in the team, it will be very difficult & time consuming to set up new environment. The developer will have to follow large set of instructions & hundreds of commands to finally set up the environment. Also we need to make sure he is using right OS & right versions of all the components. We would not guarantee that the application we are building will run the same way in different environments.
+  - All these issues will make developing, building & shipping an application very difficult. So here comes Docker to the rescue.
   - Docker streamlines the development lifecycle by allowing developers to work in standardized environments using local containers which provide your applications and services. Containers are great for continuous integration and continuous delivery (CI/CD) workflows.
 - **Responsive deployment and scaling**
   - Docker’s container-based platform allows for highly portable workloads. Docker containers can run on a developer’s local laptop, on physical or virtual machines in a data center or on cloud providers.
-  - Docker’s portability and lightweight nature also make it easy to dynamically manage workloads, scaling up or tearing down applications and services as business needs dictate, in near real time.
+  - Docker’s portability and lightweight nature also make it easy to dynamically manage workloads, scaling up or tearing down applications and services as business needs dictate.
 - **Running more workloads on the same hardware**
 
 # Docker Architecture
@@ -29,7 +29,7 @@ The Docker architecture uses a client-server model and comprises of the Docker C
 
 **Docker Client**
 
-- The Docker client enables users to interact with Docker
+- The Docker client enables users to interact with Docker.
 - The Docker client can reside on the same host as the daemon or connect to a daemon on a remote host.
 - The Docker client provides a command line interface (CLI) that allows you to issue build, run, and stop application commands to a Docker daemon.
 
@@ -61,6 +61,10 @@ The Docker architecture uses a client-server model and comprises of the Docker C
 - **Storage**
   - You can store data within the writable layer of a container but it requires a storage driver. Being non-persistent, it perishes whenever the container is not running.
   - In terms of persistent storage, Docker offers four options: Data Volumes, Data Volume Container, Directory Mounts, Storage Plugins.
+
+**Docker Registries**
+
+- Docker registries are services that provide locations from where you can store and download images. In other words, a Docker registry contains Docker repositories that host one or more Docker Images.
 
 # Deploy service to Docker using docker-compose
 
@@ -170,7 +174,7 @@ networks:
 
 6. Go to .env file and change database configuration variable values according to your docker-compose file.
 
-**Note** : If you have mysql service running on your PC/host, you need to stop it first. If you don't stop it, it will throw error that port 3306 is already in use as by default mysql uses port 3306 on host & our container also try to connect to port 3306.
+**Note** : If you have mysql service running on your PC/host, you need to stop it first. If you don't stop it, it will throw error that port 3306 is already in use as by default mysql uses port 3306 on host & our container also try to access it.
 
 7. Open terminal inside your service folder. Write command `docker-compose up --build`.
    ("docker-compose up" command starts the containers. "--build" option build images before starting containers.)
