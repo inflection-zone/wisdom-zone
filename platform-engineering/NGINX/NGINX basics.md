@@ -74,7 +74,15 @@ NGINX uses a predictable process model that is tuned to the available hardware r
 
 &nbsp;<br>
 
-- Check status of nginx service using `systemctl status nginx`(or `service nginx status`).
-- If inactive, start nginx service using `systemctl start nginx`.
-- To check processes running on nginx use `ps aux | grep nginx`. It will display master & no. of worker processes running.
+- Check status of Nginx service using `systemctl status nginx`(or `service nginx status`).
+- If inactive, start Nginx service using `systemctl start nginx`.
+- To check processes running on Nginx use `ps aux | grep nginx`. It will display master & no. of worker processes running.
 - To see and change configurations check nginx.conf file using `vi /etc/nginx/nginx.conf`.
+- Use the following command to test the Nginx configuration for any syntax or system errors:
+  `nginx -t`
+  The output will look something like this:
+  <img src="nginx-t.png" width="600" height="300"/>
+
+&nbsp;<br>
+
+# NGINX Directives
