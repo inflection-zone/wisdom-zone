@@ -82,7 +82,41 @@ NGINX uses a predictable process model that is tuned to the available hardware r
   `nginx -t`
   The output will look something like this:
   <img src="nginx-t.png" width="600" height="300"/>
+  &nbsp;<br>
 
-&nbsp;<br>
+# NGINX Directives & Contexts
 
-# NGINX Directives
+- Configuration options in Nginx are known as directives.
+- Nginx consists of modules that are controlled by directives defined in the configuration file.
+- Directives are divided into two parts:
+  1. **Simple Directive**:
+     A simple directive consists of the name and parameters separated by spaces and ends with a semicolon ( ; )
+  2. **Block Directive**:
+     The structure of block directive is similar to the simple directive, but instead of semicolon, it ends with a set of additional instructions surrounded by curly braces ({ and }).
+     If a block directive can have other directives inside the braces, then it is known as context. Eg. Events, http, location, and server.
+- In Nginx configuration file, we will notice that the configurations are organized in a tree-like structure surrounded by curly braces i.e. "{" and "}". These locations surrounded by braces is called **context** for placing configuration directive.
+- This is the section where we can declare directives. It is similar to the scope in a programming language.
+- Context can be nested within other contexts, creating a context hierarchy.
+- Types of contexts:
+  - **Main/ Global Context**:
+    - The main context is placed at the beginning of the core Nginx configuration file. The directives for this context cannot be inherited in any other context and therefore can't be overridden.
+    - The main context is used to configure details that affect the entire application on a basic level. Some common details that are configured in the main context are the user and group to run the worker processes as, the total number of workers, and the file to save the main process ID. The default error file for the entire application can be set at the main context level.
+  - **Events Context**:
+    - The events context sets global options for connection processing. There can be only one event context defined within Nginx configuration.
+    - Nginx uses an event-based connection processing model, so the directive defined within this context determines how worker processes should handle connections.
+  - **HTTP context**:
+
+    - The HTTP context is used to hold the directives for handling HTTP or HTTPS traffic.
+
+  - **Server Context**:
+    - The server context is declared within the http context.
+    - The server context is used to define the Nginx virtual host settings.
+    - There can be multiple server contexts inside the HTTP context.
+    - The directives inside the server context handle the processing of requests for resources associated with a particular domain or IP address.
+  - **Location Context**:
+    - It define directives to handle the request of the client. When any request for resource arrives at Nginx, it will try to match the URI (Uniform Resource Identifier) to one of the locations and handle it accordingly.
+    - Multiple location contexts can be defined within the server blocks. Moreover, a location context can also be nested inside another location context.
+- Directives placed in the configuration file outside of any contexts are considered to be in the main context.
+- The 'events' and 'http' directives reside in the 'main' context, 'server' resides in 'http' and 'location' in the 'server' context.
+
+# Understanding Configuration File
