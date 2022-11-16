@@ -352,3 +352,82 @@ upstream load1 {
 
 - When using the Nginx web server, server blocks (similar to virtual hosts in Apache) can be used to encapsulate configuration details and host more than one domain on a single server.
 - Following are steps to host domains on NGINX server:
+
+1.  Login as root & give sudo privileges to non-root user we are going to use for this lab using `usermod -aG sudo <username>` command. (If your user is already added to sudo group, skip this step)
+2.  Setup new document root directories –
+
+    - By default, Nginx on Ubuntu 16.04 has one server block enabled. It is configured to serve documents out of a directory at /var/www/html.
+    - This works well for a single site, we need additional directories if we’re going to serve multiple sites. We can consider the /var/www/html directory the default directory that will be served if the client request doesn’t match any of our other sites.
+    - We will create a directory structure within /var/www for each of our sites. The actual web content will be placed in an html directory within these site-specific directories.
+    - `sudo mkdir -p /var/www/example.com/html`,
+      `sudo mkdir -p /var/www/test.com/html`
+      The -p flag tells mkdir to create necessary parent directories.
+
+3.  Reassign ownership of these directories to our normal user with sudo privileges.
+
+    - `sudo chown -R $USER:$USER /var/www/example.com/html`
+    - `sudo chown -R $USER:$USER /var/www/test.com/html`
+
+4.  Change permissions of root directories by `sudo chmod -R 755 /var/www` command.
+5.  Create sample pages for each site. - Create an index.html file in your first domain:
+    `vi /var/www/example.com/html/index.html` - Inside the file, we’ll create a really basic file that indicates what site we are currently accessing.
+    <img src="example1.png" width="600" height="300"/>
+    &nbsp;<br>
+
+        - Repeat these steps for second domain too. Just replace "example.com” with “test.com”
+
+6.  Create Server block files for each domain:
+
+    - By default, Nginx contains one server block called default which we can use as a template for our own configurations.
+      `sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/example.com`
+
+          `sudo vi /etc/nginx/sites-available/example.com`
+
+    - Inside the file modify server block as:
+
+      ```
+      server{
+          listen 80;
+          listen [::]:80;
+
+          root var/www/example.com/html;
+          index index.html index.htm index.nginx-debian.html;
+
+          server_name example.com www.example.com;
+
+          location / {
+            try_files $uri $uri/ = 404;
+          }
+      }
+      ```
+
+    - Follow similar steps for second domain as well by replacing “example.com” with “test.com”
+
+7.  Enable your server blocks using following commands:
+    `sudo ln -s /etc/nginx/sites-available/example.com /etc/nginx/sites-enabled/`,
+    `sudo ln -s /etc/nginx/sites-available/test.com /etc/nginx/sites-enabled/`
+
+8.  In order to avoid a possible hash bucket memory problem that can arise from adding additional server names, we will also adjust a single value within our /etc/nginx/nginx.conf file. Open the file. Within the file, find the "server_names_hash_bucket_size 64” directive. Remove the # symbol to uncomment the line. Save & close the file.
+9.  Modify local hosts file for testing: `sudo vi /etc/hosts`
+    You need to know your server’s public IP address and the domains you want to route to the server. Let server’s public IP address is 192.168.29.157, the lines we would add to file would look something like this:
+
+<img src="hosts.png" width="600" height="250"/>
+&nbsp;<br>
+
+10. Save & close file. Restart NGINX by using `sudo systemctl restart nginx`.
+
+11. Test your results locally using `lynx http://example.com.` And `lynx http://test.com`
+
+<img src="example2.png" width="600" height="300"/>
+&nbsp;<br>
+
+<img src="test1.png" width="600" height="300"/>
+&nbsp;<br>
+
+12. You may also test results using browser:
+
+<img src="example3.png" width="600" height="300"/>
+&nbsp;<br>
+
+<img src="test2.png" width="600" height="300"/>
+&nbsp;<br>
