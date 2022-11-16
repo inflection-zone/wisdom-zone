@@ -35,7 +35,7 @@ NGINX uses a predictable process model that is tuned to the available hardware r
 2.  Download Ubuntu ISO desktop image from https://ubuntu.com/download/desktop. (Download LTS version).
 3.  Inside Virtualbox, click on New. You will see following screen.
 
-    <img src="install1.png" width="600"/>
+    <img src="install1.png" width="600" height="300"/>
 
         - Give proper name to your VM in 'Name' field.
         - Select downloaded Ubuntu ISO image at “ISO Image” field.
