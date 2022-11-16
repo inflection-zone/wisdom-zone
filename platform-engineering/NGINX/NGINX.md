@@ -231,3 +231,45 @@ Here is an example of nginx.conf file:
 <img src="proxy.png" width="600" height="250"/>
 
 # Deploy a node.js based web app using NGINX:
+
+- Here, we will create a javascript file configured as a http server & deploy it using NGINX.
+- We need to follow these steps:
+
+1. Install node.js on VM using `apt-get install nodejs`. Once completed the installation, check whether it is properly installed by using `node -v`. It returns node version you have installed.
+2. Create a new folder inside which create a javascript file 'main.js'
+3. Inside 'main.js'we will write following lines of code:
+
+```
+var http = require('http');
+http.createServer(function(req,res){
+  res.writeHead(200,{'Content-Type':'text/plain'});
+      res.end('Welcome to Webapp-1');
+}).listen(8001);
+
+console.log('Server 1 is running on port 8001');
+
+```
+
+4. Run this application using “node main.js”. You may check in the browser by hitting 'IP of VM:8001'.
+5. Stop the application & create a config file inside /etc/nginx/conf.d folder. `vi nodeapp.conf` using upstream mediator as:
+
+```
+upstream app {
+    server  VM’s IP address:8080;
+}
+server {
+    listen      80;
+    server_name VM’s IP address;
+
+    location / {
+      proxy_pass http://app;
+    }
+}
+
+```
+
+6. Once done, save the file & quit. Check conf syntax using `nginx -t`.
+7. If successful, restart the nginx service. Also run the main.js file.
+8. Check using lynx or curl `curl VM’s IP`. You will get response of node.js based application. You may also check this in browser by hitting VM’s IP.
+
+<img src="nodeapp.png" width="600" height="300"/>
