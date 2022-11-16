@@ -20,7 +20,7 @@
 
 # Architecture of NGINX
 
-<img src="NGINX architecture.png" width="600" height="250"/>
+   <img src="NGINX architecture.png" width="600" height="250"/>
 
 NGINX uses a predictable process model that is tuned to the available hardware resources:
 
@@ -35,7 +35,7 @@ NGINX uses a predictable process model that is tuned to the available hardware r
 2.  Download Ubuntu ISO desktop image from https://ubuntu.com/download/desktop. (Download LTS version).
 3.  Inside Virtualbox, click on New. You will see following screen.
 
-    <img src="installStep1.png" width="600" height="300"/>
+     <img src="https://github.com/inflection-zone/wisdom-zone/blob/Priyanka/platform-engineering/NGINX/InstallStep1.png" width="600" height="300"/>
 
         - Give proper name to your VM in 'Name' field.
         - Select downloaded Ubuntu ISO image at “ISO Image” field.
@@ -70,7 +70,7 @@ NGINX uses a predictable process model that is tuned to the available hardware r
   - Check IP address of your VM using “ip addr” command.
   - Hit this IP in the browser & you may get response like:
 
- <img src="nginxRes1.png" width="600" height="300"/>
+   <img src="nginxRes1.png" width="600" height="300"/>
 
 &nbsp;<br>
 
@@ -81,6 +81,7 @@ NGINX uses a predictable process model that is tuned to the available hardware r
 - Use the following command to test the Nginx configuration for any syntax or system errors:
   `nginx -t`
   The output will look something like this:
+  
   <img src="nginx-t.png" width="600" height="300"/>
   &nbsp;<br>
 
