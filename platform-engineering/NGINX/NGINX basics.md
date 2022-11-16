@@ -222,3 +222,12 @@ Here is an example of nginx.conf file:
 &nbsp;<br>
 
   <img src="welcome2.png" width="600" height="300"/>
+
+# Forward and reverse proxy
+
+- A proxy server, sometimes referred to as a **forward proxy**, is a server that routes traffic between client(s) and another system, usually external to the network. By doing so, it can regulate traffic according to preset policies, convert and mask client IP addresses, enforce security protocols, and block unknown traffic.
+- A **reverse proxy** is a type of proxy server. Unlike a traditional proxy server, which is used to protect clients, a reverse proxy is used to protect servers. Reverse proxy enables computers on internet to access resources on a private network.
+
+<img src="proxy.png" width="600" height="250"/>
+
+# Deploy a node.js based web app using NGINX:
