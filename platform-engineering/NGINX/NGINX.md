@@ -273,3 +273,82 @@ server {
 8. Check using lynx or curl `curl VM’s IP`. You will get response of node.js based application. You may also check this in browser by hitting VM’s IP.
 
 <img src="nodeapp.png" width="600" height="300"/>
+&nbsp;<br>
+
+**Note**: Hosting dynamic website using NGINX is not possible. It will use proxying to host dynamic content.
+
+<img src="mediators.png" width="600" height="300"/>
+&nbsp;<br>
+
+- In this application, we have used “upstream” for proxying.
+
+# Loadbalancer
+
+- A load balancer is a device that acts as a reverse proxy and distributes network or application traffic across a number of servers.
+- Load balancers are used to increase capacity and reliability of applications.
+- They improve the overall performance of applications by decreasing the burden on servers associated with managing and maintaining application and network sessions, as well as by performing application-specific tasks.
+- Algorithms used by loadbalancers:
+  - Round robin
+  - Weighted round robin
+  - Least connections
+  - Least response time
+
+# Configure NGINX as a loadbalancer
+
+- Following are the steps to configure NGINX as a loadbalancer.
+
+1. Create two node.js based web servers listening to two different ports. Let’s say port 8001 & 8002. Check both the application by running them locally as well as on the browser.
+2. Create a conf file inside /etc/nginx/conf.d folder named “lb.conf” & write following contexts:
+
+```
+upstream load1 {
+        server IP address of VM:8001;
+        server IP address of VM:8002;
+}
+
+server {
+        listen   80;
+        server_name IP address of VM;
+
+        location / {
+                proxy_pass http://load1;
+        }
+}
+
+```
+
+3. Once finished, save & quit file. Check the conf file syntax using `nginx -t`.
+4. Restart nginx service using `systemctl restart nginx`. Run both node applications.
+5. Check response locally using `curl IP address of VM` (or `lynx http://IP address of VM`).
+
+<img src="lb1.png" width="600" height="300"/>
+&nbsp;<br>
+
+<img src="lb2.png" width="600" height="300"/>
+&nbsp;<br>
+
+6. Also check in the browser by hitting IP address of VM. Try reloading the page. You may see that once it is giving response from 1st node server & next time from 2nd server.
+
+<img src="lb3.png" width="600" height="300"/>
+&nbsp;<br>
+
+<img src="lb4.png" width="600" height="300"/>
+&nbsp;<br>
+
+7. **Note**: This type of loadbalancer is called as simple loadbalancer. It is using Round Robin algorithm.
+8. To make it weighted loadbalancer, just change upstream context as follows:
+
+```
+upstream load1 {
+    server IP address of VM:8001;
+    server IP address of VM:8002 weight=2;
+ }
+
+```
+
+9. It will take 1st server’s weight=1 by default. It indicates that 2nd server has double capacity to serve client requests, so loadbalancer sends more requests to 2nd server.
+
+# Set-up NGINX server blocks (virtual hosts)
+
+- When using the Nginx web server, server blocks (similar to virtual hosts in Apache) can be used to encapsulate configuration details and host more than one domain on a single server.
+- Following are steps to host domains on NGINX server:
