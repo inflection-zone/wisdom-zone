@@ -98,6 +98,7 @@ NGINX uses a predictable process model that is tuned to the available hardware r
 - This is the section where we can declare directives. It is similar to the scope in a programming language.
 - Context can be nested within other contexts, creating a context hierarchy.
 - Types of contexts:
+
   - **Main/ Global Context**:
     - The main context is placed at the beginning of the core Nginx configuration file. The directives for this context cannot be inherited in any other context and therefore can't be overridden.
     - The main context is used to configure details that affect the entire application on a basic level. Some common details that are configured in the main context are the user and group to run the worker processes as, the total number of workers, and the file to save the main process ID. The default error file for the entire application can be set at the main context level.
@@ -116,7 +117,36 @@ NGINX uses a predictable process model that is tuned to the available hardware r
   - **Location Context**:
     - It define directives to handle the request of the client. When any request for resource arrives at Nginx, it will try to match the URI (Uniform Resource Identifier) to one of the locations and handle it accordingly.
     - Multiple location contexts can be defined within the server blocks. Moreover, a location context can also be nested inside another location context.
+
 - Directives placed in the configuration file outside of any contexts are considered to be in the main context.
 - The 'events' and 'http' directives reside in the 'main' context, 'server' resides in 'http' and 'location' in the 'server' context.
 
 # Understanding Configuration File
+
+Here is an example of nginx.conf file:
+
+<img src="nginx.conf.png" width="600" height="300"/>
+
+&nbsp;<br>
+
+- The first three lines of the file are in main/global context.
+
+  - Here, the first directive i.e. `worker_processes auto;` shows how many worker processes are running. You may change it by replacing "auto" with your desired value.
+  - The PID file stores the main process ID of the nginx process
+
+- The “events” context is contained within the “main” context. `worker_connections` directive in events context tells how many max. connections a worker process can have
+
+- When configuring Nginx as a web server or reverse proxy, the “http” context will hold the majority of the configuration. This context will contain all of the directives and other contexts necessary to define how the program will handle HTTP or HTTPS connections.
+
+  - Some of the directives that are defined in http contexts are: control the default locations for access and error logs (access_log and error_log), configure asynchronous I/O for file operations (aio, sendfile, and directio), and configure the server’s statuses when errors occur (error_page).
+  - Other directives configure compression (gzip and gzip_disable), the rules that Nginx will follow to try to optimize packets and system calls (sendfile, tcp_nodelay, and tcp_nopush).
+  - Additional directives configure an application-level document root and index files (root and index) and set up the various hash tables that are used to store different types of data (_\_hash_bucket_size and _\_hash_max_size for server_names, types, and variables).
+
+- The “server” context is declared within the “http” context. The reason for allowing multiple declarations of the server context is that each instance defines a specific virtual server to handle client requests. You can have as many server blocks as you need, each of which can handle a specific subset of connections.
+
+  - The directives which decide if a server block will be used to answer a request are:
+
+    - **listen**: The ip address / port combination that this server block is designed to respond to. If a request is made by a client that matches these values, this block will potentially be selected to handle the connection.
+    - **server_name**: This directive is the other component used to select a server block for processing. If there are multiple server blocks with listen directives of the same specificity that can handle the request, Nginx will parse the “Host” header of the request and match it against this directive.
+
+- The next context is the location context. Multiple location contexts can be defined, each location is used to handle a certain type of client request, and each location is selected by virtue of matching the location definition against the client request through a selection algorithm. Location blocks live within server contexts and, unlike server blocks, can be nested inside one another.
