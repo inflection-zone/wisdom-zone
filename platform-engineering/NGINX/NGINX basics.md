@@ -86,6 +86,16 @@ NGINX uses a predictable process model that is tuned to the available hardware r
   <img src="nginx-t.png" width="600" height="300"/>
   &nbsp;<br>
 
+8. Check firewall status.
+
+- Use `ufw status` to check whether firewall is active or not. If inactive use `ufw enable` to enable firewall.
+- “ufw app list” lists firewall rules.
+
+<img src="firewall.png" width="600" height="300"/>
+
+- `ufw allow Nginx Full` allows both HTTP & HTTPS rules.
+- The syntax to list all the current rules in a numbered list format: `ufw status numbered`.
+
 # NGINX Directives & Contexts
 
 - Configuration options in Nginx are known as directives.
@@ -127,7 +137,7 @@ NGINX uses a predictable process model that is tuned to the available hardware r
 
 Here is an example of nginx.conf file:
 
-<img src="nginx.conf.png" width="600" height="300"/>
+  <img src="nginx.conf.png" width="600" height="300"/>
 
 &nbsp;<br>
 
@@ -152,3 +162,63 @@ Here is an example of nginx.conf file:
     - **server_name**: This directive is the other component used to select a server block for processing. If there are multiple server blocks with listen directives of the same specificity that can handle the request, Nginx will parse the “Host” header of the request and match it against this directive.
 
 - The next context is the location context. Multiple location contexts can be defined, each location is used to handle a certain type of client request, and each location is selected by virtue of matching the location definition against the client request through a selection algorithm. Location blocks live within server contexts and, unlike server blocks, can be nested inside one another.
+
+# Deploy a static web-application using NGINX
+
+- Let's create a simple web-app containing simple HTML file which will display "Welcome" message on webpage & deploy it using NGINX.
+- Following are the steps for it:
+
+1. Create single page web-application:
+
+   - Create new directory using `mkdir webapp`.
+   - Change directory to webapp using `cd webapp` & create new file “index.html” using `vi index.html`.
+   - Write simple html code. For example:
+
+   ```
+     <html>
+     <body>
+     <h1> Welcome to my website </h1>
+     </body>
+     </html>
+   ```
+
+   - After writing html code, press esc then :wq! to save the file & quit.
+
+2. Create config file for webapp inside /etc/nginx/conf.d directory using `vi webapp.conf` (.conf extension indicates it is a configuration file).
+
+   - Write following context inside conf file:
+
+   ```
+    server {
+        listen      80;
+        server_name Ip address;
+
+        location / {
+          root  location of your web-app;
+          index index.html;
+       }
+
+        error_page 500 502 503 504 /50x.html;
+        location = /50x.html {
+           root  /usr/share/nginx/html;
+        }
+
+    }
+   ```
+
+3. Check nginx.conf file for “include /etc/nginx/conf.d/\*.conf”. It indicates that nginx will consider all “.conf” files inside conf.d directory as configuration files while running applications.
+
+  <img src="include.png" width="600" height="300"/>
+&nbsp;<br>
+
+4. Once all configurations have been done, test config file for syntax error if any using `nginx -t` command.
+
+5. After successful, restart nginx service using `systemctl restart nginx` & check master & worker processes are running or not, using `ps aux | grep nginx`.
+6. If everything is fine, check your application by running it locally using `lynx http://IP address of VM`. (If 'lynx' is not installed on your VM, get it using `apt-get install lynx`)
+7. You may also check it in browser by hitting our VM’s IP address.
+
+  <img src="welcome1.png" width="600" height="300"/>
+
+&nbsp;<br>
+
+  <img src="welcome2.png" width="600" height="300"/>
