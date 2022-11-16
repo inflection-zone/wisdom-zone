@@ -35,7 +35,7 @@ NGINX uses a predictable process model that is tuned to the available hardware r
 2.  Download Ubuntu ISO desktop image from https://ubuntu.com/download/desktop. (Download LTS version).
 3.  Inside Virtualbox, click on New. You will see following screen.
 
-     <img src="https://github.com/inflection-zone/wisdom-zone/blob/Priyanka/platform-engineering/NGINX/InstallStep1.png" width="600" height="300"/>
+     <img src="InstallStep1.png" width="600" height="300"/>
 
         - Give proper name to your VM in 'Name' field.
         - Select downloaded Ubuntu ISO image at “ISO Image” field.
@@ -67,6 +67,7 @@ NGINX uses a predictable process model that is tuned to the available hardware r
 
 - Once completed, check version using `nginx -v`.
 - You may also check in browser whether nginx is installed properly on your VM using following steps:
+
   - Check IP address of your VM using “ip addr” command.
   - Hit this IP in the browser & you may get response like:
 
@@ -81,7 +82,7 @@ NGINX uses a predictable process model that is tuned to the available hardware r
 - Use the following command to test the Nginx configuration for any syntax or system errors:
   `nginx -t`
   The output will look something like this:
-  
+
   <img src="nginx-t.png" width="600" height="300"/>
   &nbsp;<br>
 
