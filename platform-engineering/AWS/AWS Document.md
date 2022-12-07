@@ -60,3 +60,23 @@
   1. Login to AWS management console as a root user.
   2. We can see following screen. Select desired region. Then click on "Services" tab to browse AWS services.
      <img src="EC2-1.png" width="900" height="300"/>
+     &nbsp;<br>
+  3. Select EC2 service. On the next screen, select instances. Then following screen appears. Click on "Launch Instances"
+     <img src="EC2-2.png" width="900" height="300"/>
+     &nbsp;<br>
+  4. On the next screen, we have to give desired specifications for our instance. Give any name you want, then select AMI (Amazon machine image - OS for our instance). Note- If you are using free tier account, select free tier eligible AMI.
+     <img src="EC2-3.png" width="900" height="300"/>
+     &nbsp;<br>
+  5. Then select right instance type. It is nothing but the CPU & RAM configurations. Then for key-pair (required for login into instance), click on "Create new key-pair".
+     <img src="EC2-4.png" width="900" height="300"/>
+     &nbsp;<br>
+  6. In network settings, select desired VPC (here, we are using AWS default VPC), then subnet (It is nothing but the availability zone. In Mumbai region, there are 3 subnets, you may select any of them or if you give no prference, AWS decides where to launch your instance), enable auto-assign public IP.
+     <img src="EC2-5.png" width="900" height="300"/>
+     &nbsp;<br>
+  7. Then set firewall (security group). Click on "Create new security group". Give it a name & description. Then add rule. (Here we are creating Linux instance, so we are opening SSH port no.22 because we will remotely access our linux instance through ssh. For windows instance, you need to add RDP rule in this section). We may add more than one rule to this section. In source type there are 3 options- anywhere, custom & my ip. (If you select anywhere, it means anyone from anywhere can access your instance. With custom, we may specify any custom IP to access instance. With 'my ip', instance can only be accessed by your IP address).
+     <img src="EC2-6.png" width="900" height="300"/>
+     &nbsp;<br>
+  8. Add storage. For free tier, it is providing 8Gb storage. If you want more you may increase it or you may add more volumes to it.
+  9. Click on "Launch instance".
+  10. Instance will get ready in few seconds. Click on "View all instances". You may see your instance running.
+      <img src="EC2-7.png" width="900" height="300"/>
