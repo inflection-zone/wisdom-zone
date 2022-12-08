@@ -97,3 +97,33 @@
       &nbsp;<br>
 
 - Steps to create & access windows instance:
+
+  1. Click on "Launch instances". Give name to your Instance. Select windows AMI (Free tier eligible).
+     <img src="EC2-11.png" width="900" height="300"/>
+     &nbsp;<br>
+
+  2. Select instance type (Free tier eligible). Then select previously created key-pair or create new. (Note: You may use single key-pair for maximum 500 instances.)
+     <img src="EC2-12.png" width="900" height="300"/>
+     &nbsp;<br>
+  3. In network settings, as we done with linux instance, select AWS default VPC, select subnet, enable public IP.
+  4. To set firewall (i.e. security group), select type RDP, because we access windows instance through rdp client port no. 3389.
+     <img src="EC2-13.png" width="900" height="300"/>
+     &nbsp;<br>
+
+  5. Configure storage. And then click on "Launch instance".
+  6. Select instance & click on "connect".
+     <img src="EC2-14.png" width="800" height="250"/>
+     &nbsp;<br>
+  7. Then select RDP Client. Then "Download remote desktop file". Click on "Get password".
+     <img src="EC2-15.png" width="900" height="300"/>
+     &nbsp;<br>
+  8. It opens following window. Click on "Upload private key file".
+     <img src="EC2-16.png" width="900" height="300"/>
+     &nbsp;<br>
+  9. Upload key-pair we have created. Then click on "Decrypt password". Then we will get password to login into our instance. Copy that password.
+     <img src="EC2-17.png" width="900" height="300"/>
+     &nbsp;<br>
+  10. Open downloaded RDP client & click on "Connect".
+      <img src="EC2-18.png" width="800" height="250"/>
+      &nbsp;<br>
+  11. Then paste the copied password. Click on "OK". Then click on "Yes". You are logged into your windows instance.
