@@ -57,6 +57,7 @@
   - Metadata, known as tags, that you can create and assign to your Amazon EC2 resources
   - Virtual networks you can create that are logically isolated from the rest of the AWS Cloud, and that you can optionally connect to your own network, known as virtual private clouds(VPC).
 - Steps to create Amazon EC2 instance:
+
   1. Login to AWS management console as a root user.
   2. We can see following screen. Select desired region. Then click on "Services" tab to browse AWS services.
      <img src="EC2-1.png" width="900" height="300"/>
@@ -80,3 +81,19 @@
   9. Click on "Launch instance".
   10. Instance will get ready in few seconds. Click on "View all instances". You may see your instance running.
       <img src="EC2-7.png" width="900" height="300"/>
+      &nbsp;<br>
+
+- Steps to access EC2 instance with Mobaxterm:
+
+  1.  Download & install Mobaxterm.(https://download.mobatek.net/2222022102210348/MobaXterm_Portable_v22.2.zip)
+  2.  Go to AWS EC2. Slect running instance. Click on "Details". We can see here our instance has got two IPs - public IP & private IP.
+      <img src="EC2-8.png" width="900" height="300"/>
+      &nbsp;<br>
+  3.  Copy public IP of the instance. Go to Mobaxterm. Click on "Session" to start new session. Then click on "SSH". Paste copied public IP in "Host" field. Login as "ec2-user". Then click on "Advanced SSH Settings". Use private key you have created. Click on "Ok".
+      <img src="EC2-9.png" width="900" height="300"/>
+      &nbsp;<br>
+  4.  Now you are logged in into your instance. You can now access your instance.
+      <img src="EC2-10.png" width="900" height="300"/>
+      &nbsp;<br>
+
+- Steps to create & access windows instance:
