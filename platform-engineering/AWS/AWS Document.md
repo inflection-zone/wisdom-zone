@@ -98,7 +98,7 @@
 
 - Steps to create & access windows instance:
 
-  1. Click on "Launch instances". Give name to your Instance. Select windows AMI (Free tier eligible).
+  1. Go to EC2 service. Click on "Launch instances". Give name to your Instance. Select windows AMI (Free tier eligible).
      <img src="EC2-11.png" width="900" height="300"/>
      &nbsp;<br>
 
@@ -127,3 +127,50 @@
       <img src="EC2-18.png" width="800" height="250"/>
       &nbsp;<br>
   11. Then paste the copied password. Click on "OK". Then click on "Yes". You are logged into your windows instance.
+
+- Steps to install webserver on linux instance:
+
+  1. Go to EC2 service. Click on "Launce instances".
+  2. Give name to instance. Select amazon linux AMI. Then select right instance type. Select previously created key-pair.
+  3. In network settings, select AWS default VPC, subnet, enable auto assign public IP. Then in security group, we have to add "HTTP" rule, as we are deploying webserver & we will see the webpage in web browser.
+     <img src="EC2-20.png" width="800" height="250"/>
+     &nbsp;<br>
+  4. Then configure storage as per your requirement. Go to Advanced details. Scroll down & you will see "User data" section at the bottom. Add following script to it.
+     ```
+     #!/bin/bash
+     sudo su -
+     yum install httpd -y
+     echo "welcome to pune" >/var/www/html/index.html
+     service httpd start
+     chkconfig httpd on
+     ```
+     <img src="EC2-21.png" width="800" height="250"/>
+     &nbsp;<br>
+  5. Click on "Launch instance". Click on "View all instances". Select instance & copy it's public IP address. Paste it in browser & you will see the message.
+     <img src="EC2-22.png" width="800" height="250"/>
+     &nbsp;<br>
+
+- **Instance Types**: Amazon EC2 provides a wide selection of instance types optimized to fit different use cases. Instance types comprise varying combinations of CPU, memory, storage, and networking capacity and give you the flexibility to choose the appropriate mix of resources for your applications. Each instance type includes one or more instance sizes, allowing you to scale your resources to the requirements of your target workload.
+
+  1.  **General Purpose**: General purpose instances provide a balance of compute, memory and networking resources and can be used for a variety of workloads. These instances are ideal for applications that use these resources in equal proportions such as web servers and code repositories.
+  2.  **Compute Optimized**: Compute Optimized instances are ideal for compute bound applications that benefit from high performance processors. Instances belonging to this family are well suited for batch processing workloads, media transcoding, high performance web servers, high performance computing (HPC), scientific modeling, dedicated gaming servers and other compute intensive applications.
+  3.  **Memory Optimized**: Memory optimized instances are designed to deliver fast performance for workloads that process large data sets in memory.
+  4.  **Accelerated Computing**: Accelerated computing instances use hardware accelerators, or co-processors, to perform functions, such as floating point number calculations, graphics processing, or data pattern matching, more efficiently than is possible in software running on CPUs.
+  5.  **Storage Optimized**: Storage optimized instances are designed for workloads that require high, sequential read and write access to very large data sets on local storage. They are optimized to deliver tens of thousands of low-latency, random I/O operations per second (IOPS) to applications.
+
+- **Instance purchasing options**:
+  1.  On-Demand Instances: With On-Demand Instances, you pay for compute capacity by the second with no long-term commitments. You have full control over its lifecycle—you decide when to launch, stop, hibernate, start, reboot, or terminate it. We should use On-Demand Instances for applications with short-term, irregular workloads that cannot be interrupted.
+  2.  Reserved Instances: Reserved Instances provide you with significant savings on your Amazon EC2 costs compared to On-Demand Instance pricing. Resrved instances give you dedicated hypervisers. You can purchase a Reserved Instance for a one-year or three-year commitment. The following payment options are available for Reserved Instances:
+      - All Upfront: Full payment is made at the start of the term, with no other costs or additional hourly charges incurred for the remainder of the term, regardless of hours used.
+      - Partial Upfront: A portion of the cost must be paid upfront and the remaining hours in the term are billed at a discounted hourly rate, regardless of whether the Reserved Instance is being used.
+      - No Upfront: You are billed a discounted hourly rate for every hour within the term, regardless of whether the Reserved Instance is being used. No upfront payment is required.
+  3.  Spot Instances: A Spot Instance is an instance that uses spare EC2 capacity that is available for less than the On-Demand price. Because Spot Instances enable you to request unused EC2 instances at steep discounts, you can lower your Amazon EC2 costs significantly. The hourly price for a Spot Instance is called a Spot price. Spot Instances are a cost-effective choice if you can be flexible about when your applications run and if your applications can be interrupted. For example, Spot Instances are well-suited for data analysis, batch jobs, background processing, and optional tasks.
+  4.  Dedicated Hosts: An Amazon EC2 Dedicated Host is a physical server with EC2 instance capacity fully dedicated to your use. Dedicated Hosts allow you to use your existing per-socket, per-core, or per-VM software licenses, including Windows Server, Microsoft SQL Server, SUSE, and Linux Enterprise Server.
+
+# Amazon EBS (Elastic Block Storage):
+
+- Amazon Elastic Block Store (Amazon EBS) provides block level storage volumes for use with EC2 instances. EBS volumes are raw, unformatted block devices. You can mount these volumes as devices on your instances.
+- EBS volumes that are attached to an instance are exposed as storage volumes that persist independently from the life of the instance. You can create a file system on top of these volumes, or use them in any way you would use a block device (such as a hard drive).
+- You can dynamically change the configuration of a volume attached to an instance.
+- Amazon EBS can be used for data that must be quickly accessible and requires long-term persistence. EBS volumes are particularly well-suited for use as the primary storage for file systems, databases, or for any applications that require fine granular updates and access to raw, unformatted, block-level storage.
+- Amazon EBS is well suited to both database-style applications that rely on random reads and writes, and to throughput-intensive applications that perform long, continuous reads and writes.
