@@ -195,25 +195,63 @@
 | Magnetic Disk |    1 GB      |    1 TB      | NA    | NA         |
 
 * Steps to create EBS volume & attach to instance: 
-1. Login to AWS management console. Create one linux EC2 instance.
-2. Then go to Elastic Block Store & click on volumes.
+   1. Login to AWS management console. Create one linux EC2 instance.
+   2. Then go to Elastic Block Store & click on volumes.
       <img src="EBS-1.png" width="800" height="250"/>
      &nbsp;<br>
-3. We may see the volume we have attached during instance creation steps. Now click on "Create Volume". Then specify required details like volume type (ssd), size (10 GB), availablility zone(same as instance), tag to the volume. Click on "Create Volume"
+   3. We may see the volume we have attached during instance creation steps. Now click on "Create Volume". Then specify required details like volume type (ssd), size (10 GB), availablility zone(same as instance), tag to the volume. Click on "Create Volume"
       <img src="EBS-2.png" width="800" height="250"/>
      &nbsp;<br>
-4. You may now see your added volume in volumes list. When status of volume is changed to "Available", select volume, go to "Actions", click on "Attache volume" 
+   4. You may now see your added volume in volumes list. When status of volume is changed to "Available", select volume, go to "Actions", click on "Attache volume" 
       <img src="EBS-3.png" width="800" height="250"/>
      &nbsp;<br>
      <img src="EBS-4.png" width="800" height="250"/>
      &nbsp;<br>
-5. Select instance to which we want to attache this volume. Then click on "Attach Volume"
+   5. Select instance to which we want to attache this volume. Then click on "Attach Volume"
       <img src="EBS-5.png" width="800" height="250"/>
      &nbsp;<br>
 
-6. Login into instance using mobaxterm. Switch user to root. Then type `df -h` to see the local filesystem. It does not show our attached volume. So type `lsblk` to display details about block devices. In this list we can see our added volume.
+   6. Login into instance using mobaxterm. Switch user to root. Then type `df -h` to see the local filesystem. It does not show our attached volume. So type `lsblk` to display details about block devices. In this list we can see our added volume.
       <img src="EBS-6.png" width="800" height="250"/>
      &nbsp;<br>
-7. So we have to mount this volume block to our filesystem. For that first format the disk using `mkfs.ext4 /dev/xvdf` command. (Here "/dev/xvdf" is device name of my volume. You may use yours.) Then create one datapoint to mount this volume with `mkdir /data`. Mount volume to this datapoint using `mount /dev/xvdf /data`. Now again check local filesystem using `df -h`. You may now see our added volume in this list. 
+   7. So we have to mount this volume block to our filesystem. For that first format the disk using `mkfs.ext4 /dev/xvdf` command. (Here "/dev/xvdf" is device name of my volume. You may use yours.) Then create one datapoint to mount this volume with `mkdir /data`. Mount volume to this datapoint using `mount /dev/xvdf /data`. Now again check local filesystem using `df -h`. You may now see our added volume in this list. 
       <img src="EBS-7.png" width="800" height="250"/>
      &nbsp;<br>
+
+# Amazon EFS: 
+* Amazon Elastic File System (Amazon EFS) provides serverless, fully elastic file storage so that you can share file data without provisioning or managing storage capacity and performance.
+* Amazon EFS is built to scale on demand to petabytes without disrupting applications, growing and shrinking automatically as you add and remove files.
+* The service manages all the file storage infrastructure for you, meaning that you can avoid the complexity of deploying, patching, and maintaining complex file system configurations.
+* You can access your Amazon EFS file system concurrently from multiple NFS clients, so applications that scale beyond a single connection can access a file system. Amazon EC2 and other AWS compute instances running in multiple Availability Zones within the same AWS Region can access the file system, so that many users can access and share a common data source.
+* Amazon EFS offers a range of storage classes designed for different use cases. These include: 
+   1. Standard storage classes – EFS Standard and EFS Standard–Infrequent Access (Standard–IA), which offer Multi-AZ resilience and the highest levels of durability and availability.
+   2. One Zone storage classes – EFS One Zone and EFS One Zone–Infrequent Access (EFS One Zone–IA), which offer you the choice of additional savings by choosing to save your data in a single Availability Zone.
+
+* The following image shows multiple EC2 instances accessing an Amazon EFS file system that is configured with Standard storage classes from multiple Availability Zones in an AWS Region.
+   <img src="EFS-1.png" width="900" height="250"/>
+     &nbsp;<br>
+* The following image shows multiple EC2 instances accessing an Amazon EFS file system using One Zone storage from different Availability Zones in an AWS Region.
+   <img src="EFS-2.png" width="900" height="250"/>
+     &nbsp;<br>
+* Steps to create EFS & access it with EC2 instance:
+   1. Login to AWS management console. Search "EFS" in services. Go to EFS. Click on "Create file system".
+      <img src="EFS-3.png" width="900" height="250"/>
+     &nbsp;<br>
+   2. Fill the required details like name, select VPC (AWS default), select standard storage class. Click on "Create".
+      <img src="EFS-4.png" width="900" height="250"/>
+     &nbsp;<br>
+   3. Go to security groups. Create new security group with inbound rule "NFS" port no. 2049 open for everyone.
+       <img src="EFS-5.png" width="900" height="250"/>
+     &nbsp;<br>
+   4. Go to EFS. Click on created file system. Go to "Network Tab", click on "Manage". For all Availability Zones, select newly created security group & save. 
+      <img src="EFS-6.png" width="900" height="250"/>
+     &nbsp;<br>
+   5. Create an EC2 instance with inbound rule NFS port no.2049 open for everyone. 
+   6. Go to EFS. Click on created file system. Click on "Attach". Copy the last command.
+      <img src="EFS-7.png" width="900" height="250"/>
+     &nbsp;<br>
+   7. Access EC2 instance using MObaxterm. Create new directory "data1". Paste copied command. Instead of /efs in command type /data1 (name of mountpoint you've created). Then use `df -h` to see the local filesystem. You may see that EFS is mounted on data1. Now you may add whatever you want to this like files, folders etc. 
+      <img src="EFS-8.png" width="900" height="250"/>
+     &nbsp;<br>
+
+     
