@@ -182,3 +182,38 @@
   2.  Provisioned IOPS SSD volumes (io1 and io2) are designed to meet the needs of I/O-intensive workloads that are sensitive to storage performance and consistency.
   3.  Throughput Optimized HDD volumes (st1) provide low-cost magnetic storage that defines performance in terms of throughput rather than IOPS. These volumes are ideal for large, sequential workloads such as Amazon EMR, ETL, data warehouses, and log processing.
   4.  Cold HDD volumes (sc1) provide low-cost magnetic storage that defines performance in terms of throughput rather than IOPS. These volumes are ideal for large, sequential, cold-data workloads. If you require infrequent access to your data and are looking to save costs, these volumes provides inexpensive block storage.
+  5. Magnetic Disk
+
+* Comparison of Volume types features: 
+
+| Volume Type   | Minimum Size | Maximum Size | IOPS  | Throughput |
+|---------------|--------------|--------------|-------|------------|
+| gp1 & gp2     |    1 GB      |    16 GB     | 16000 | 250 MB     |
+| io1 & io2     |    4 GB      |    16 TB     | 64000 | 1000 MB    |
+|    st1        |   500 GB     |    16 TB     | 500   | 500 MB     |
+|    sc1        |   500 GB     |    16 TB     | 250   | 250 MB     |
+| Magnetic Disk |    1 GB      |    1 TB      | NA    | NA         |
+
+* Steps to create EBS volume & attach to instance: 
+1. Login to AWS management console. Create one linux EC2 instance.
+2. Then go to Elastic Block Store & click on volumes.
+      <img src="EBS-1.png" width="800" height="250"/>
+     &nbsp;<br>
+3. We may see the volume we have attached during instance creation steps. Now click on "Create Volume". Then specify required details like volume type (ssd), size (10 GB), availablility zone(same as instance), tag to the volume. Click on "Create Volume"
+      <img src="EBS-2.png" width="800" height="250"/>
+     &nbsp;<br>
+4. You may now see your added volume in volumes list. When status of volume is changed to "Available", select volume, go to "Actions", click on "Attache volume" 
+      <img src="EBS-3.png" width="800" height="250"/>
+     &nbsp;<br>
+     <img src="EBS-4.png" width="800" height="250"/>
+     &nbsp;<br>
+5. Select instance to which we want to attache this volume. Then click on "Attach Volume"
+      <img src="EBS-5.png" width="800" height="250"/>
+     &nbsp;<br>
+
+6. Login into instance using mobaxterm. Switch user to root. Then type `df -h` to see the local filesystem. It does not show our attached volume. So type `lsblk` to display details about block devices. In this list we can see our added volume.
+      <img src="EBS-6.png" width="800" height="250"/>
+     &nbsp;<br>
+7. So we have to mount this volume block to our filesystem. For that first format the disk using `mkfs.ext4 /dev/xvdf` command. (Here "/dev/xvdf" is device name of my volume. You may use yours.) Then create one datapoint to mount this volume with `mkdir /data`. Mount volume to this datapoint using `mount /dev/xvdf /data`. Now again check local filesystem using `df -h`. You may now see our added volume in this list. 
+      <img src="EBS-7.png" width="800" height="250"/>
+     &nbsp;<br>
