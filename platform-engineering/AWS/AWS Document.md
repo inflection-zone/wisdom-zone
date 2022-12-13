@@ -290,7 +290,23 @@
       - Gateway Load Balancers use Gateway Load Balancer endpoints to securely exchange traffic across VPC boundaries. A Gateway Load Balancer endpoint is a VPC endpoint that provides private connectivity between virtual appliances in the service provider VPC and application servers in the service consumer VPC. 
 
 * Steps to configure Classic Loadbalancer:
-   1. Login into AWS management console. Launch two EC2 instances with webservers installed.
+   1. Login into AWS management console. Launch two EC2 instances with webservers installed. Write following code lines under user data section-
+```
+   #!/bin/bash
+   sudo su -
+   yum install httpd -y
+   echo "Welcome to Pune" >/var/www/html/index.html
+   service httpd start
+   chkconfig httpd on
+```
+```
+   #!/bin/bash
+   sudo su -
+   yum install httpd -y
+   echo "Welcome to Mumbai" >/var/www/html/index.html
+   service httpd start
+   chkconfig httpd on
+```
    2. Go to load balancers. Click on "Create on Loadbalancer". Select classic load balancer. Click on "Create"
       <img src="ELB-2.png" width="900" height="250"/>
      &nbsp;<br>
@@ -313,4 +329,24 @@
       <img src="ELB-8.png" width="900" height="250"/>
      &nbsp;<br>
      <img src="ELB-9.png" width="900" height="250"/>
+     &nbsp;<br>
+
+* Steps to configure Application Load Balancer:
+   1. Create two EC2 instances with webservers installed. 
+   2. Then In the navigation pane, under Load Balancing, choose Target Groups.Choose Create target group.Under Basic configuration, keep the Target type as instance. Enter a name for the new target group. Keep the default protocol (HTTP) and port (80).Select the VPC containing your instances. Keep the protocol version as HTTP1. For Health checks, keep settings as given in below image.Choose Next.
+      <img src="ELB-10.png" width="900" height="250"/>
+     &nbsp;<br>
+   3. On the Register targets page, select both the instances as targets & click on "include as pending below". Then click on "Create Target Group"
+      <img src="ELB-11.png" width="900" height="250"/>
+     &nbsp;<br>
+   4. Go to load balancers. Click on "Create new loadbalancer".
+   Select "Application loadbalancer". Click on "Create".
+   5. Under basic configuration, give name to loadbalancer. Select internet facing scheme, select IP address type as IPV4. In network mapping section, select VPC, select all three subnets of VPC. Add "Loadbalancer-SG" security group we have created at the time of classic loadbalancer. Under listeners & routing, keep HTTP protocol & port 80. Select created target group. Click on "Create load balancer".
+   6. Go to target group. Check whether health status of both the registered targets is "Healthy".
+      <img src="ELB-12.png" width="900" height="250"/>
+     &nbsp;<br>
+   7. If yes, go to loadbalancer. Copy DNS name & paste it over the browser. You may see the first server's webpage(i.e. loadbalancer is sending traffic to first webserver.). Then reload the page. Now you can see the second webpage(i.e. loadbalancer is sending the traffic to webserver-2).
+      <img src="ELB-13.png" width="900" height="250"/>
+     &nbsp;<br>
+     <img src="ELB-14.png" width="900" height="250"/>
      &nbsp;<br>
