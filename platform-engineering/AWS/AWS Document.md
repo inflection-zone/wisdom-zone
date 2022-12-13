@@ -254,4 +254,63 @@
       <img src="EFS-8.png" width="900" height="250"/>
      &nbsp;<br>
 
-     
+# Amazon Elastic Load Balancing
+* Elastic Load Balancing automatically distributes your incoming traffic across multiple targets, such as EC2 instances, containers, and IP addresses, in one or more Availability Zones.  
+* It monitors the health of its registered targets, and routes traffic only to the healthy targets. Elastic Load Balancing scales your load balancer capacity automatically in response to changes in incoming traffic. 
+* **Benefits of Loadbalancers**:
+   - A load balancer distributes workloads across multiple compute resources, such as virtual servers. 
+   - Using a load balancer increases the availability and fault tolerance of your applications.
+   - You can add and remove compute resources from your load balancer as your needs change, without disrupting the overall flow of requests to your applications.
+   - You can configure health checks, which monitor the health of the compute resources, so that the load balancer sends requests only to the healthy ones.
+* Elastic Load Balancing supports the following load balancers: Application Load Balancers, Network Load Balancers, Gateway Load Balancers, and Classic Load Balancers. You can select the type of load balancer that best suits your needs.
+   1. Classic Loadbalancers: 
+      - Classic load balancer serves as a single point of contact for clients. This increases the availability of your application. You can add and remove instances from your load balancer as your needs change, without disrupting the overall flow of requests to your application. 
+      - Elastic Load Balancing scales your load balancer as traffic to your application changes over time. Elastic Load Balancing can scale to the vast majority of workloads automatically.
+      - A listener checks for connection requests from clients, using the protocol and port that you configure, and forwards requests to one or more registered instances using the protocol and port number that you configure. You add one or more listeners to your load balancer.
+      - You can configure health checks, which are used to monitor the health of the registered instances so that the load balancer only sends requests to the healthy instances.
+      - To ensure that your registered instances are able to handle the request load in each Availability Zone, it is important to keep approximately the same number of instances in each Availability Zone registered with the load balancer.
+      
+   2. Application Loadbalancers: 
+      - An Application Load Balancer functions at the application layer, the seventh layer of the Open Systems Interconnection (OSI) model. 
+      - After the load balancer receives a request, it evaluates the listener rules in priority order to determine which rule to apply, and then selects a target from the target group for the rule action. 
+      - Routing is performed independently for each target group, even when a target is registered with multiple target groups. 
+      - You can configure the routing algorithm used at the target group level. The default routing algorithm is round robin; alternatively, you can specify the least outstanding requests routing algorithm.
+
+   3. Network Loadbalancers: 
+      - A Network Load Balancer functions at the fourth layer of the Open Systems Interconnection (OSI) model. 
+      - It can handle millions of requests per second. 
+      - After the load balancer receives a connection request, it selects a target from the target group for the default rule. It attempts to open a TCP connection to the selected target on the port specified in the listener configuration.
+      - For TCP traffic, the load balancer selects a target using a flow hash algorithm based on the protocol, source IP address, source port, destination IP address, destination port, and TCP sequence number. The TCP connections from a client have different source ports and sequence numbers, and can be routed to different targets. Each individual TCP connection is routed to a single target for the life of the connection.
+      - For UDP traffic, the load balancer selects a target using a flow hash algorithm based on the protocol, source IP address, source port, destination IP address, and destination port. A UDP flow has the same source and destination, so it is consistently routed to a single target throughout its lifetime. Different UDP flows have different source IP addresses and ports, so they can be routed to different targets.
+   
+   4. Gateway Loadbalancers: 
+      - Gateway Load Balancers enable you to deploy, scale, and manage virtual appliances, such as firewalls, intrusion detection and prevention systems, and deep packet inspection systems. It combines a transparent network gateway (that is, a single entry and exit point for all traffic) and distributes traffic while scaling your virtual appliances with the demand.
+      - A Gateway Load Balancer operates at the third layer of the Open Systems Interconnection (OSI) model, the network layer. It listens for all IP packets across all ports and forwards traffic to the target group that's specified in the listener rule. It maintains stickiness of flows to a specific target appliance using 5-tuple (for TCP/UDP flows) or 3-tuple (for non-TCP/UDP flows).
+      - The Gateway Load Balancer and its registered virtual appliance instances exchange application traffic using the GENEVE protocol on port 6081.
+      - Gateway Load Balancers use Gateway Load Balancer endpoints to securely exchange traffic across VPC boundaries. A Gateway Load Balancer endpoint is a VPC endpoint that provides private connectivity between virtual appliances in the service provider VPC and application servers in the service consumer VPC. 
+
+* Steps to configure Classic Loadbalancer:
+   1. Login into AWS management console. Launch two EC2 instances with webservers installed.
+   2. Go to load balancers. Click on "Create on Loadbalancer". Select classic load balancer. Click on "Create"
+      <img src="ELB-2.png" width="900" height="250"/>
+     &nbsp;<br>
+   3. Give name to loadbalancer. Select VPC. Click on "Next".
+      <img src="ELB-3.png" width="900" height="250"/>
+     &nbsp;<br>
+   4. Click on "Create new security group". Add SSH & HTTP rules open for everyone. Click on "Next:Configure Health Check"
+      <img src="ELB-4.png" width="900" height="250"/>
+     &nbsp;<br>
+   5. Add details to configure health check. Click on "Next:Add EC2 instances"
+      <img src="ELB-5.png" width="900" height="250"/>
+     &nbsp;<br>
+   6. Select EC2 instances we want to configure. 
+      <img src="ELB-6.png" width="900" height="250"/>
+     &nbsp;<br>
+   7. Add tag. Click on "Review & create". Then select loadbalancer. In description tab, copy DNS name.
+      <img src="ELB-7.png" width="900" height="250"/>
+     &nbsp;<br>
+   8. Paste DNS name into browser. You may see webpage of first webserver. Then reload the page, you may see webpage of second webserver.
+      <img src="ELB-8.png" width="900" height="250"/>
+     &nbsp;<br>
+     <img src="ELB-9.png" width="900" height="250"/>
+     &nbsp;<br>
