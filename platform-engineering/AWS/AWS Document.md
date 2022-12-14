@@ -350,3 +350,62 @@
      &nbsp;<br>
      <img src="ELB-14.png" width="900" height="250"/>
      &nbsp;<br>
+   
+* Note: We use auto-scaling feature of AWS instead of alone loadbalncer in real-life scenario.
+
+# AWS Autoscaling
+* AWS Auto Scaling monitors your applications and automatically adjusts capacity to maintain steady, predictable performance at the lowest possible cost. 
+* Using AWS Auto Scaling, it’s easy to setup application scaling for multiple resources across multiple services in minutes.
+* AWS Auto Scaling makes scaling simple with recommendations that allow you to optimize performance, costs, or balance between them. 
+* With AWS Auto Scaling, your applications always have the right resources at the right time.
+* Benefits: 
+  - AWS Auto Scaling lets you set target utilization levels for multiple resources in a single, intuitive interface. You can quickly see the average utilization of all of your scalable resources without having to navigate to other consoles.
+  - Using AWS Auto Scaling, you maintain optimal application performance and availability, even when workloads are periodic, unpredictable, or continuously changing. AWS Auto Scaling continually monitors your applications to make sure that they are operating at your desired performance levels. When demand spikes, AWS Auto Scaling automatically increases the capacity of constrained resources so you maintain a high quality of service.
+  - AWS Auto Scaling lets you build scaling plans that automate how groups of different resources respond to changes in demand. AWS Auto Scaling automatically creates all of the scaling policies and sets targets for you based on your preference.
+  - AWS Auto Scaling can help you optimize your utilization and cost efficiencies when consuming AWS services so you only pay for the resources you actually need. When demand drops, AWS Auto Scaling will automatically remove any excess resource capacity so you avoid overspending. 
+
+* Steps to configure Auto-scaling: 
+  1. Go to EC2 dashboard. Select launch templates. Click on "Create launch template".
+   <img src="Auto-1.png" width="900" height="250"/>
+     &nbsp;<br>
+  2. On create launch template page, under template name & description section give details like shown in below image.
+   <img src="Auto-2.png" width="900" height="250"/>
+     &nbsp;<br>
+  3. Under "Launch template contents" section, select linux AMI, instance type t2.micro, existing key-pair, existing security group, EBS 8GB storage, give resource tag as "MyTemp". Then under advanced details, inside user data section, put below code. Then click on "Create launch template"
+   ```
+      #!/bin/bash
+      sudo su -
+      yum install httpd -y
+      echo "Welcome to Auto-scaling" >/var/www/html/index.html
+      service httpd start
+      chkconfig httpd on
+   ```
+  4. Go to "Auto Scaling Groups" Click on "Create Auto Scaling group".
+   <img src="Auto-3.png" width="900" height="250"/>
+     &nbsp;<br>
+  5. On "Choose launch template or configuration" page, give name to autoscaling group & select created launch template, version 1. Click on "Next".
+  6. Under Network section, select default VPC , all availabilty zones &subnets. Click on "Next".
+  7. On next page, provide configuration as given in image below. Click on "Next"
+   <img src="Auto-4.png" width="900" height="250"/>
+     &nbsp;<br>
+  8. On "Configure group size and scaling policies" page, give following configuration. Click on "Next" again "Next".
+   <img src="Auto-5.png" width="900" height="250"/>
+     &nbsp;<br>
+  9. Add tags. Click on "Next". Review the configuration once & then click on "Create Auto Scaling group".
+  10. As soon as you create auto scaling group, it creates minimum number (you have provided during configuration) of instances. Here we want minimum 2 instances. 
+   <img src="Auto-6.png" width="900" height="250"/>
+     &nbsp;<br>
+  11. If we stop or terminate any instance, it will immediately create one new instance. Or if we terminate both it will start creating two new instances.
+   <img src="Auto-7.png" width="900" height="250"/>
+     &nbsp;<br>
+
+      <img src="Auto-7.png" width="900" height="250"/>
+     &nbsp;<br>
+
+* Features of AWS Auto Scaling:
+   - Unified scaling: Using AWS Auto Scaling, you can configure automatic scaling for all of the scalable resources powering your application from a single unified interface
+   - Automatic resource discovery: AWS Auto Scaling scans your environment and automatically discovers the scalable cloud resources underlying your application, so you don’t have to manually identify these resources one by one through individual service interfaces.
+   - Built-in scaling strategies: Using AWS Auto Scaling, you can select one of three predefined optimization strategies designed to optimize performance, optimize costs, or balance the two. If you prefer, you can set your own target resource utilization. Using your selected scaling strategy, AWS Auto Scaling will create the scaling policies for each of your resources for you.
+   - Predictive Scaling: Predictive Scaling predicts future traffic, including regularly-occurring spikes, and provisions the right number of EC2 instances in advance of predicted changes. Auto Scaling enhanced with Predictive Scaling delivers faster, simpler, and more accurate capacity provisioning resulting in lower cost and more responsive applications. 
+   - Fully-managed: AWS Auto Scaling automatically creates target tracking scaling policies for all of the resources in your scaling plan, using your selected scaling strategy to set the target values for each metric.
+   - Smart scaling policies: AWS Auto Scaling continually calculates the appropriate scaling adjustments and immediately adds and removes capacity as needed to keep your metrics on target. AWS target tracking scaling policies are self-optimizing, and learn your actual load patterns to minimize fluctuations in resource capacity.
