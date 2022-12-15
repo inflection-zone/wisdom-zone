@@ -409,3 +409,121 @@
    - Predictive Scaling: Predictive Scaling predicts future traffic, including regularly-occurring spikes, and provisions the right number of EC2 instances in advance of predicted changes. Auto Scaling enhanced with Predictive Scaling delivers faster, simpler, and more accurate capacity provisioning resulting in lower cost and more responsive applications. 
    - Fully-managed: AWS Auto Scaling automatically creates target tracking scaling policies for all of the resources in your scaling plan, using your selected scaling strategy to set the target values for each metric.
    - Smart scaling policies: AWS Auto Scaling continually calculates the appropriate scaling adjustments and immediately adds and removes capacity as needed to keep your metrics on target. AWS target tracking scaling policies are self-optimizing, and learn your actual load patterns to minimize fluctuations in resource capacity.
+
+# Amazon S3 (Simple Storage Service)
+* Amazon Simple Storage Service (Amazon S3) is an object storage service that offers industry-leading scalability, data availability, security, and performance. 
+* Customers can use Amazon S3 to store and protect any amount of data.
+* Amazon S3 provides management features so that you can optimize, organize, and configure access to your data to meet your specific business, organizational, and compliance requirements.
+* Features: 
+   - Storage classes: Amazon S3 offers a range of storage classes designed for different use cases like S3 Standard, S3 Standard Infrequent Access, One-zone IA, Glacier, Deep Glacier, S3 Intelligent Tiering.
+   - Storage management: Amazon S3 has storage management features that you can use to manage costs, meet regulatory requirements, reduce latency, and save multiple distinct copies of your data for compliance requirements.
+   - Access management: Amazon S3 provides features for auditing and managing access to your buckets and objects. 
+   - Storage logging and monitoring: Amazon S3 provides logging and monitoring tools that you can use to monitor and control how your Amazon S3 resources are being used. For more information, see Monitoring tools.
+   - Strong consistency: Amazon S3 provides strong read-after-write consistency for PUT and DELETE requests of objects in your Amazon S3 bucket in all AWS Regions. 
+* A S3 bucket is a container for objects. An object is a file and any metadata that describes that file.
+* To store an object in Amazon S3, you create a bucket and then upload the object to the bucket. When the object is in the bucket, you can open it, download it, and move it. When you no longer need an object or a bucket, you can clean up your resources.
+
+* Steps to create S3 bucket:
+   1. Login to AWS management console. Search for S3 in services. Go to S3. Click on "Create bucket".
+      <img src="s3-1.png" width="800" height="250"/>
+     &nbsp;<br>
+   2. On create bucket page, give bucket a name. Bucket name should be unique gloabally. Select desired AWS region. In object ownership section, select ACL enabled, select object writer as object owner.
+      <img src="s3-2.png" width="800" height="300"/>
+     &nbsp;<br>
+   3. Then disable "Block public access". Tick "I acknowledge" & disable bucket versioning. Click on "Create bucket".
+      <img src="s3-3.png" width="800" height="300"/>
+     &nbsp;<br>
+   4. You may see your created bucket in buckets list.
+      <img src="s3-4.png" width="800" height="300"/>
+     &nbsp;<br>
+   5. Click on bucket name. You will see the following page. Here you can create new folder or upload files & folders from your local machine.
+      <img src="s3-5.png" width="800" height="300"/>
+     &nbsp;<br>
+   6. Click on "Upload". On next page, click on "Add files" to add files of any format or click on "Add folder" to upload a folder. You may drag & drop files & folders here. Once added, click on upload.
+      <img src="s3-6.png" width="800" height="250"/>
+     &nbsp;<br>
+   7. You can now see your uploaded files & folders to S3 Bucket. You can see that by default it will take storage class as S3 standard. Here you may change storage class, download these files, delete files, make them public, and many more operations.
+
+* Storage Classes in S3: 
+   1. S3 Standard: 
+      - Data is stored in all availability zones of selected region.
+      - Frequently accessed data is stored in S3 standard.
+      - Uploading price is lower than retrieving price.
+   2. S3 Standard Infrequent Access (IA):
+      - Similar to S3 Standard, data is stored in all availability zones in selected region.
+      - It requires more time to retrieve data. i.e. availibility od data is not as good as S3 Standard. 
+      - Pricing is same as S3 standard.
+   3. One-zone Infrequent Access (IA): 
+      - Data is stored in only one availability zone.
+      - Availability of data is poorer than S3 standard IA.
+      - Prices are lesser than S3 standard & S3 standard IA.
+   4. Glacier: 
+      - You can't access your data frequently.
+      - Data is stored over all the availabilty zones.
+      - You have to transfer data first to one-zone IA to retrieve.
+      - There is condition that if the waiting time to retrieve data is more, price will be less.
+   5. Glacier Deep Archive:
+      - Designed for durability of 99.999999999% of objects across multiple Availability Zones
+      - Lowest cost storage class designed for long-term retention of data that will be retained for 7-10 years
+      - Ideal alternative to magnetic tape libraries
+      - Retrieval time within 12 hours 
+   6. Intelligent Tiering:
+      - Designed for durability of 99.999999999% of objects across multiple Availability Zones and for 99.9% availability over a given year.
+      - Small monthly monitoring and auto tiering charge
+      - No operational overhead, no lifecycle charges, no retrieval charges, and no minimum storage duration. 
+
+*  Steps to mount S3 bucket in EC2 Instance: 
+   1. Create S3 bucket. 
+   2. Create IAM role: Go to IAM. Click on Roles. Then click on "Create role". Select entity type - AWS service, Select EC2 as use case. Click on "Next". Add permission-S3 Full Access. Give name to role & click on "Create role".
+      <img src="s3-7.png" width="800" height="250"/>
+     &nbsp;<br>
+     <img src="s3-8.png" width="800" height="250"/>
+     &nbsp;<br>
+   3. Go to EC2. Create an instance. Select instance, go to Action, in security select Modify IAM role.
+      <img src="s3-9.png" width="800" height="250"/>
+     &nbsp;<br> 
+   4. Choose created role. Click on "Update IAM role".
+      <img src="s3-10.png" width="800" height="250"/>
+     &nbsp;<br>
+   5. Login into instance using Mobaxterm. Update system. Install the dependencies using `sudo yum install automake fuse fuse-devel gcc-c++ git libcurl-devel libxml2-devel make openssl-devel`. Clone S3fs source code from git using `git clone https://github.com/s3fs-fuse/s3fs-fuse.git`. Now change to source code  directory, and compile and install the code with the following commands:
+       ```
+      cd s3fs-fuse
+      ./autogen.sh
+      ./configure --prefix=/usr --with-openssl
+       make
+       sudo make install
+      ```  
+   Then create new directory using `mkdir /s3data`. Mount s3 bucket using command `s3fs -o iam_role=EC2S3Role myfirstbucketqweasd /s3data`.
+      <img src="s3-11.png" width="800" height="250"/>
+     &nbsp;<br>
+
+
+
+
+
+# AWS Identity & Access Management (IAM)
+* AWS Identity and Access Management (IAM) is a web service that helps you securely control access to AWS resources.
+* When you create an AWS account, you begin with one sign-in identity that has complete access to all AWS services and resources in the account. This identity is called the AWS account root user and is accessed by signing in with the email address and password that you used to create the account. 
+* Features: 
+   - Shared access to your AWS account: You can grant other people permission to administer and use resources in your AWS account without having to share your password or access key.
+   - Granular permissions: You can grant different permissions to different people for different resources.
+   - Secure access to AWS resources for applications that run on Amazon EC2: You can use IAM features to securely provide credentials for applications that run on EC2 instances. These credentials provide permissions for your application to access other AWS resources. Examples include S3 buckets and DynamoDB tables.
+   - Multi-factor authentication (MFA): You can add two-factor authentication to your account and to individual users for extra security.
+   - Free to use: AWS Identity and Access Management (IAM) and AWS Security Token Service (AWS STS) are features of your AWS account offered at no additional charge. 
+* IAM Identities: 
+   - The AWS account root user or an IAM administrator for the account can create IAM identities. An IAM identity provides access to an AWS account. 
+   - A user group is a collection of IAM users managed as a unit. An IAM identity represents a user, and can be authenticated and then authorized to perform actions in AWS. 
+   - Each IAM identity can be associated with one or more policies. Policies determine what actions a user, role, or member of a user group can perform, on which AWS resources, and under what conditions.
+   - **IAM users**: An AWS IAM user is an entity that you create in AWS to represent the person or application that uses it to interact with AWS. A user in AWS consists of a name and credentials. 
+   A primary use for IAM users is to give people the ability to sign in to the AWS Management Console for interactive tasks and to make programmatic requests to AWS services using the API or CLI. 
+   When you create an IAM user, you grant it permissions by making it a member of a user group that has appropriate permission policies attached or by directly attaching policies to the user. You can also clone the permissions of an existing IAM user.
+   - **IAM user groups**: An IAM user group is a collection of IAM users. User groups let you specify permissions for multiple users, which can make it easier to manage the permissions for those users. For example, you could have a user group called Admins and give that user group typical administrator permissions. Any user in that user group automatically has Admins group permissions. If a new user joins your organization and needs administrator privileges you can assign the appropriate permissions by adding the user to the Admins user group. If a person changes jobs in your organization, instead of editing that user's permissions you can remove them from the old user groups and add them to the appropriate new user groups.
+   - **IAM Roles**: An IAM role is an IAM identity that you can create in your account that has specific permissions. 
+   An IAM role is similar to an IAM user, in that it is an AWS identity with permission policies that determine what the identity can and cannot do in AWS. However, instead of being uniquely associated with one person, a role is intended to be assumable by anyone who needs it. 
+   You can use roles to delegate access to users, applications, or services that don't normally have access to your AWS resources. 
+   Roles can be used by the following:
+      - An IAM user in the same AWS account as the role
+      - An IAM user in a different AWS account than the role
+      - A web service offered by AWS such as Amazon Elastic Compute Cloud (Amazon EC2)
+
+* One AWS root account by default can create 5000 users, 300 groups and 1000 roles.
