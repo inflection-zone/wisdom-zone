@@ -43,7 +43,20 @@
 
   3. Resource Providers: A resource provider is made up of two different pieces:
         - A resource plugin, which is the binary used by the deployment engine to manage a resource. 
-        - An SDK which provides bindings for each type of resource the provider can manage.
+        - An SDK which provides bindings for each type of resource the provider can manage. 
+
+* Let's see some more concepts related to Pulumi: 
+  * **Projects**: A Pulumi project is any folder which contains a Pulumi.yaml file. A new project can be created with `pulumi new`. A project specifies which runtime to use and determines where to look for the program that should be executed during deployments. Supported runtimes are nodejs, python, dotnet, go, java, and yaml. 
+
+  * **Stacks**: A stack is an isolated, independently configurable instance of a Pulumi program. Every Pulumi program is deployed to a stack. Stacks are commonly used to denote different phases of development (such as development, staging, and production) or feature branches (such as feature-x-dev). A project can have as many stacks as you need. By default, Pulumi creates a stack for you when you start a new project using the `pulumi new` command. 
+
+  * **Resources**: Resources represent the fundamental units that make up your cloud infrastructure, such as a compute instance, a storage bucket, or a Kubernetes cluster.
+  The two subclasses of resources are:
+  a. CustomResource: A custom resource is a cloud resource managed by a resource provider such as AWS, Microsoft Azure, Google Cloud or Kubernetes.
+  b. ComponentResource: A component resource is a logical grouping of other resources that creates a larger, higher-level abstraction that encapsulates its implementation details. 
+ 
+  * **State and Backends**: Pulumi stores metadata about your infrastructure so that it can manage your cloud resources. This metadata is called state. Each stack has its own state, and state is how Pulumi knows when and how to create, read, delete, or update cloud resources.
+
 
 # Project1(sample):
   * Prerequisites:
@@ -159,7 +172,8 @@ Duration: 14s
 
 3. Then follow steps 1 to 4 from previous section for creating a sample pulumi project. Open "index.ts" file. We have to write configurations to deploy our application over AWS ECS cluster. 
 
-4. One may refer following repository for pulumi code & configuration files. : https://github.com/Priyanka-Inflectionzone/pulumischoolapp.git
+4. One may refer following repository for pulumi code & configuration files. : https://github.com/Priyanka-Inflectionzone/pulumischoolapp.git 
+  **Note**: One can find Pulumi packages for creating and managing Amazon Web Services (AWS) cloud resources at: https://www.pulumi.com/registry/packages/aws/api-docs/
 
 5. Once finished updating "index.ts", open terminal & type command `pulumi up`. When asked, choose option "yes". You may see that all the resources which we have defined in the code are getting deployed over AWS.
 You may also see the deployed resources on Pulumi online dashboard. 
@@ -175,5 +189,8 @@ You may also see the deployed resources on Pulumi online dashboard.
   <img src="pulumi3.png" width="600" /> 
 
 8. You may delete stack by using following command in terminal: `pulumi destroy`. 
+
+
+
 
   
