@@ -45,7 +45,7 @@
         - A resource plugin, which is the binary used by the deployment engine to manage a resource. 
         - An SDK which provides bindings for each type of resource the provider can manage.
 
-# Project:
+# Project1(sample):
   * Prerequisites:
   To get started with pulumi demo project, we need to have:
    1. An AWS account, AWS CLI installed & configured.
@@ -130,6 +130,50 @@ Duration: 14s
   `pulumi destroy`
   You’ll be prompted to make sure you really want to delete these resources. This can take a minute or two; Pulumi waits until all resources are shut down and deleted before it considers the destroy operation to be complete. 
 
-  
+# Project2- Schoool-app
+* In this, I have written simple application which will access a mysql database. We have to deploy it over Amazon ECS cluster using Pulumi-typescript. One may find this apllication code here: https://github.com/Priyanka-Inflectionzone/school-app.git 
 
-    
+* Steps to deploy this appliction over aws using pulumi, we have to follow these steps: 
+ 1. Create am AWS IAM user account with administrative access policy. Configure your AWS CLI for this account. 
+ 2. Create an ECR repository called "school-app". For this follow these steps: 
+  i. Login into your AWS management console. Go to services & search for ECR.
+  ii. In ECR, click on "Create repository". Fill the details as shown in following image.
+
+   <img src="ecr-1.png" width="600" />
+     &nbsp;<br>
+ 
+
+   iii. Once repository is created, select it & click on "View push commands"
+
+  <img src="ecr-2.png" width="600" />
+     
+
+   iv. It will then show all the steps and commands you need to use to push your apllication image to this repository. Follow the steps according to your OS.
+
+   <img src="ecr-3.png" width="600" />
+    &nbsp;<br>
+
+  v. Once completed check whether your application image is there in the repository. You will see the image URI, we will need it afterwards while writing pulumi code.
+
+  <img src="ecr-4.png" width="600" />
+
+3. Then follow steps 1 to 4 from previous section for creating a sample pulumi project. Open "index.ts" file. We have to write configurations to deploy our application over AWS ECS cluster. 
+
+4. One may refer following repository for pulumi code & configuration files. : https://github.com/Priyanka-Inflectionzone/pulumischoolapp.git
+
+5. Once finished updating "index.ts", open terminal & type command `pulumi up`. When asked, choose option "yes". You may see that all the resources which we have defined in the code are getting deployed over AWS.
+You may also see the deployed resources on Pulumi online dashboard. 
+  
+  <img src="pulumi1.png" width="600" /> 
+
+6. Go to AWS management console. In services, search for ECS. You may see that the cluster & all other resources are deployed. Then go to running container. You may see container logs in cloudwatch. 
+ 
+  <img src="pulumi2.png" width="600" /> 
+
+7. Now you may copy public IP of container & paste it on browser with port number. You may see that your application is running fine. 
+
+  <img src="pulumi3.png" width="600" /> 
+
+8. You may delete stack by using following command in terminal: `pulumi destroy`. 
+
+  
