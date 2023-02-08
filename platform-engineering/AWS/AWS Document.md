@@ -566,4 +566,4 @@
      &nbsp;<br>
 
 * Steps to create User group:
-   1. 
+   
