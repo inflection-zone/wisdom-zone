@@ -53,7 +53,7 @@
    - Single volume is shared among the containers running in a pod.
    - Kubernetes allow us to choose this volume. It can be from local storage or cloud storage like EBS or a network storage like NFS.
 
-4. Self healing: 
+4. Self healing:
    - In k8s, if the container fails, it will try to restart the container.
    - If a node fails, it replaces the node & reschedule the containers on new node. 
    - If container does not respond to teh user-defined health-check, it kills the container.
@@ -135,6 +135,264 @@
        - Kubernetes supports container runtimes such as Docker, containerd, CRI-O, Rocketlet etc.
        - The most commonly used platform is Docker. 
 
-    
+# Kubernetes Objects:
+* Kubernetes objects are persistent entities in the Kubernetes system. 
+* Kubernetes uses these entities to represent the state of your cluster. 
+* By creating an object, we are telling kubernetes system what we want our cluster's workload to look like. 
+* Specifically, they can describe: 
+  - What containerized applications are running (and on which nodes)
+  - The resources available to those applications
+  - The policies around how those applications behave, such as restart policies, upgrades, and fault-tolerance
+* These objects are distinguish between "workload-oriented" objects that are used for handling container workloads and "infrastructure oriented" objects that handle configuration, networking and security.
+* We can describe these objects in .yaml file called "manifest".
+* Following is the list of objects in k8s: 
+  - Pod 
+  - Service 
+  - Volume 
+  - Namespace 
+  - Replicasets 
+  - Secrets 
+  - Configmaps 
+  - Deployments 
+  - Jobs 
+  - Daemonsets etc. 
+
+  1. Pods: 
+     - Pods are the smallest unit of deployment in Kubernetes. 
+     - They reside on cluster nodes and have their IP addresses, enabling them to communicate with the rest of the cluster. 
+     - A single pod can host one or more containers, providing storage and networking resources.
+     - A pod can fail without impacting the system's functioning. 
+     - Kubernetes automatically replaces each failed pod with a new pod replica and keeps the cluster running. 
+     - Pods also store configuration information that instructs Kubernetes on how to run the containers.
+  2. Services: 
+     - Services provide a way to expose applications running in pods. 
+     - Their purpose is to represent a set of pods that perform the same function and set the policy for accessing those pods. 
+     - Although pod failure is an expected event in a cluster, Kubernetes replaces the failed pod with a replica with a different IP address. This creates problems in communication between pods that depend on each other. 
+     - Using the kube-proxy process that runs on each cluster node, Kubernetes maps the service's virtual IP address to pod IP addresses. 
+     - This process allows for easier internal networking but also enables exposing of the deployment to external networks via techniques such as load balancing. 
+
+   3. Volumes: 
+      - Volumes are objects whose purpose is to provide storage to pods. 
+      - There are two basic types of volumes in Kubernetes: 
+        - Ephemeral volumes persist only during the lifetime of the pod they are tied to.
+        - Persistent volumes, which are not destroyed when the pod crashes. Persistent volumes are created by issuing a request called PersistentVolumeClaim (PVC). Kubernetes uses PVCs to provision volumes, which then act as links between pods and physical storage.
+
+   4. Namespaces: 
+      - The purpose of the Namespace object is to act as a separator of resources in the cluster. 
+      - A single cluster can contain multiple namespaces, allowing administrators to organize the cluster better and simplify resource allocation.
+      - A new cluster comes with multiple namespaces created for system purposes and the default namespace for users. 
+      - Administrators can create any number of additional namespaces. For example, one for development and one for testing.
       
+   5. ReplicaSets: 
+      - ReplicaSets serve the same purpose as ReplicationControllers, i.e. maintaining the same number of pod replicas on the cluster. 
+      - However, the difference between these two objects is the type of selectors they support. While ReplicationControllers accept only equality-based selectors, ReplicaSets additionally support set-based selectors.
+      - Set-based selectors allow using a set of values to filter keys. The statements accept three operators: in, notin, and exists.
+
+   6. Deployments: 
+      - Deployments are controller objects that provide instructions on how Kubernetes should manage the pods hosting a containerized application. Using deployments, administrators can: 
+        - Scale the number of pod replicas.
+        - Rollout updated code.
+        - Perform rollbacks to older code versions.
+      - Once created, the deployment controller monitors the health of the pods and nodes. 
+      - In case of a failure, it destroys the failed pods and creates new ones. 
+      - It can also bypass the malfunctioning nodes, enabling the application to remain functional even when a hardware error occurs. 
    
+   7. ConfigMaps: 
+      - ConfigMaps are Kubernetes objects used to store container configuration data in key-value pairs. 
+      - By separating configuration data from the rest of the container image, ConfigMaps enable the creation of lighter and more portable images. 
+      - They also allow developers to use the same code with different configurations depending on whether the app is in the development, testing, or production phase.
+   
+   8. Jobs: 
+      - Jobs are workload controller objects that execute finite tasks. 
+      - While other controller objects have the task of permanently maintaining the desired state and number of pods, jobs are designed to finish a task and terminate the associated pods. 
+      - This property makes them useful for maintenance, monitoring, batch tasks, and work queue management. 
+      - Job instances run simultaneously or consecutively. 
+      - Scheduled jobs are a separate controller object called CronJob. 
+
+   9. DaemonSets: 
+      - DaemonSets are controller objects whose purpose is to ensure that specific pods run on specific (or all) nodes in the cluster.
+      -  Kubernetes scheduler ignores the pods created by a DaemonSet, so those pods last for as long as the node exists. 
+      - This object is particularly useful for setting up daemons that need to run on each node, like those used for cluster storage, log collection, and node monitoring. 
+      - By default, a DaemonSet creates a pod on every node in the cluster. If the object needs to target specific nodes, their selection is performed via the nodeSelector field in the configuration file. 
+
+* Object **Spec** and **Status**: 
+  - Object spec and object status are two nested fields in the object configuration that Kubernetes utilizes to control the object. 
+    - The spec field is used to declare the desired state of the object, i.e., the characteristics of the resource. The user provides this field when creating the object.
+    - The status field provides information about the current object state. This field is provided by Kubernetes during the lifetime of the object.
+  - Kubernetes control plane monitors the status of every object in the cluster and attempts to match the current state to the desired state.
+  - For example, consider the following deployment YAML: The spec field states that the desired number of replicas for the nginx deployment is five. After the deployment is successfully created, Kubernetes monitors its status and updates the status field accordingly. If one replica fails, the status field reports only four running replicas, which triggers Kubernetes to start another pod.
+
+
+```
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: nginx-test
+    labels:
+      app: nginx
+  spec:
+    replicas: 5
+    selector:
+      matchLabels:
+        app: nginx
+    template:
+      metadata:
+        labels:
+          app: nginx
+      spec:
+        containers:
+        - name: nginx
+          image: nginx:1.23.1
+          ports:
+          - containerPort: 80
+```
+* Object Required Fields:
+  - When the user wants to create a Kubernetes object, the following fields must be provided in the YAML file:
+    - `apiVersion` - Specifies the version of Kubernetes API for creating the object.
+    - `kind` - Provides the object type, for example, Deployment, ReplicaSet, or Service.
+    - `metadata` - Lists object identifiers, such as its name, UID, labels, and namespace.
+    - `spec` - States the desired state for the object, like the number of replicas and the container image.
+
+* Kubernetes Object Management: Kubernetes objects are managed using various GUI dashboards or using the kubectl CLI tool. With kubectl, users can manage objects by employing three distinct management techniques:
+   1. Imperative commands:  
+      - When using imperative commands, a user operates directly on live objects in a cluster. The user provides operations to the kubectl command as arguments or flags. 
+      - This is the recommended way to get started or to run a one-off task in a cluster. Because this technique operates directly on live objects, it provides no history of previous configurations
+      - Example - Run an instance of the nginx container by creating a Deployment object: 
+       ` kubectl create deployment nginx --image nginx ` 
+
+   2. Imperative object configuration: 
+      - In imperative object configuration, the kubectl command specifies the operation (create, replace, etc.), optional flags and at least one file name.
+      - The file specified must contain a full definition of the object in YAML or JSON format. 
+      - Example- Create the objects defined in a configuration file:
+       ` kubectl create -f nginx.yaml `
+         &nbsp;<br> 
+      - Delete the objects defined in two configuration files: 
+       ` kubectl delete -f nginx.yaml -f redis.yaml` 
+          &nbsp;<br>  
+      - Update the objects defined in a configuration file by overwriting the live configuration:
+       `kubectl replace -f nginx.yaml` 
+
+   3. Declarative object configuration:
+      - When using declarative object configuration, a user operates on object configuration files stored locally, however the user does not define the operations to be taken on the files. 
+      - Create, update, and delete operations are automatically detected per-object by kubectl.
+      - This enables working on directories, where different operations might be needed for different objects.
+      - Example - Process all object configuration files in the configs directory, and create or patch the live objects. You can first `diff` to see what changes are going to be made, and then `apply`:
+      `kubectl diff -f configs/`
+      `kubectl apply -f configs/`
+      
+* Management of Kuberenetes objects using configuration files:
+  Step 1 - Install `kubectl`: 
+     - Download the latest release of "kubectl" from following url: https://dl.k8s.io/release/v1.26.0/bin/windows/amd64/kubectl.exe 
+     - Create new folder & move the downloaded .exe file to that folder. Copy that folder's path.
+     
+     <img src="install_kubectl1.png" width="600" />
+
+     - Open advanced system settings. Inside which go to "Environment variables". Then select "path" under "user variables". Click on "Edit".
+
+     <img src="install_kubectl2.png" width="600" /> 
+
+     - Then click on "New". Paste copied folder path here. And click "Ok" 
+
+     <img src="install_kubectl3.png" width="600" /> 
+
+    - You may now open command prompt & check this installation using command `kubectl version`. This will prompt you the kubectl client & server versions as shown: 
+     <img src="install_kubectl4.png" width="600" /> 
+
+  Step 2 - You need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster. If you do not already have a cluster, you can create one by using "minikube". To install minikube: 
+  - Download the latest release using following url: https://storage.googleapis.com/minikube/releases/latest/minikube-installer.exe 
+  - Move this downloaded binary to the folder containing "kubectl.exe" as we have already added that folder to path of "Environment variables". 
+  - You may verify that minikube is installed correctly by using `minikube version` command in command prompt. 
+
+    <img src="install_minikube1.png" width="600" /> 
+
+  Step 3 - Start your cluster: From a terminal with administrator access, run:
+   
+    `minikube start` 
+
+   - If you have docker installed, it will take docker as vm driver by default or you can select virtualbox or ssh as vrtual machine manager. 
+
+     <img src="minikube1.png" width="600" /> 
+
+  Step 4 - Create new folder. In which create new file name it as "pod2.yml". Write a manifest file to deploy a pod as follows: 
+   ```
+     kind: Pod
+     apiVersion: v1
+     metadata:
+       name: testpod1
+     spec:
+       containers:
+         - name: c01
+           image: nginx
+           command:
+             [
+               "/bin/bash",
+               "-c",
+               "while true; do echo Hello-Priyanka; sleep 5 ; done",
+             ]
+           ports:
+             - containerPort: 80
+
+   ``` 
+
+  Step 5 - Open terminal and run command: `kubectl apply -f pod2.yml`. You will get output as: 
+      <img src="minikube2.png" width="600" /> 
+
+  Step 6 - To see the deployment run command : `kubectl get pods` 
+      
+   <img src="minikube3.png" width="600" /> 
+
+  
+  Step 7 - Details of pod can be seen using command : `kubectl describe pod/testpod1`  
+    <img src="minikube4.png" width="600" />
+
+  Step 8 - Create a manifest file called "deploy.yml" for deployment object as follows: 
+   ``` 
+   kind: Deployment
+   apiVersion: apps/v1
+   metadata:
+     name: mydeployments
+   spec:
+     replicas: 2
+     selector:
+       matchLabels:
+         name: deployment
+     template:
+       metadata:
+         name: testpod
+         labels:
+           name: deployment
+       spec:
+         containers:
+           - name: c00
+             image: centos
+             command:
+               [
+                 "/bin/bash",
+                 "-c",
+                 "while true; do echo Hello-Minikube; sleep 5; done",
+               ]
+
+   ```
+  Step 9 - Apply this deployment using `kubectl apply -f deploy.yml` 
+     
+    <img src="minikube5.png" width="600" /> 
+
+  Step 10 - Write a manifest file for service and name it as "service.yml" 
+   ```
+   kind: Service
+   apiVersion: v1
+   metadata:
+     name: demoservice
+   spec:
+     ports:
+       - port: 80
+         targetPort: 80
+     selector:
+       name: deployment 
+     type: ClusterIP
+
+   ```
+
+  Step 11 - Apply this manifest using `kubectl apply -f service.yml` 
+     
+     <img src="minikube6.png" width="600" /> 
