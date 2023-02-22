@@ -508,7 +508,7 @@
      type: NodePort
   ```
 
-Manifest for app2 (manifest2.yaml):
+   Manifest for app2 (manifest2.yaml):
   ```
    apiVersion: apps/v1
    kind: Deployment
