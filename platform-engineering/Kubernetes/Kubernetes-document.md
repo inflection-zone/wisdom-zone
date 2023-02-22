@@ -599,3 +599,141 @@ Manifest for app2 (manifest2.yaml):
    &nbsp;<br> 
 
 # Interservice Communication in K8s
+* To begin with, we will create a simple setup that will help us realise different examples better. This is not a production grade set-up or any real-world scenario, this is just a simulation of two pods where one pod communicates with another, the first pod is an HTTP web-server and the second is a simple curl client, which makes a request to the web-server and terminates. We will be creating a Job for the client, because Jobs are the best way to deploy terminating instances on K8s. 
+* Step 1: Create a deployment manifest: We will be using the web-server image provided by katacoda an interactive K8s learning platform.  Lets create a manifest for deployment as follows: (web-server.yaml)
+
+```
+ apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: webapp1
+ spec:
+   replicas: 1
+   selector:
+     matchLabels:
+       app: webapp1
+   template:
+     metadata:
+       labels:
+         app: webapp1
+     spec:
+       containers:
+         - name: webapp1
+           image: katacoda/docker-http-server:latest
+           ports:
+             - containerPort: 80
+  ``` 
+
+* Step 2: Let's deploy this to k8s cluster using `kubectl create -f web-server.yaml` 
+   <img src="comm1.png" width="600" /> 
+   &nbsp;<br> 
+  If we browse on localhost port 8080, we will get response as:
+    <img src="comm2.png" width="600" /> 
+   &nbsp;<br> 
+* Step 3: Now create a manifest for a job which will create another pod and simply call curl command by specifying IP of first pod. (client-job.yaml)
+ ```
+  apiVersion: batch/v1
+  kind: Job
+  metadata:
+    name: client-job
+  spec:
+    template:
+      spec:
+        containers:
+          - name: client
+            image: byrnedo/alpine-curl
+            command: ["curl", "-s", "http://172.17.0.3"]
+        restartPolicy: Never
+    backoffLimit: 4
+ ``` 
+ Deploy this job on k8s cluster using `kubectl create -f client-job.yaml`and see the response using command `kubectl logs <client-job pod name>` 
+    <img src="comm3.png" width="600" /> 
+   &nbsp;<br> 
+
+* This is one of the ways to communicate i.e. communication using pod's IP directly. But it is very unreliable. It has following drawbacks: 
+  - The Pod IPs can change - In case the cluster got restarted, the Pod IPs can change sometimes, this might break your client or the requesting service.
+  - You need to know the IP in-prior - Many K8s deployments are dynamic in nature, they are set-up and installed by CD tools, this makes it impossible to know the IP of the Pod in prior, because the Pod can get any IP when it is created. 
+
+* Since Pods are non-permanent and dynamic in nature as discussed above, addressing them permanently becomes a problem. To mitigate issue Kubernetes came up with the concept of Services. So we'll now see the communication using services.
+* In order to bring this into our set-up, we just have to create a Service resource for the web-server we created. Let's create the service definition with YAML. (web-app-service.yaml)
+ ```
+  apiVersion: v1
+  kind: Service
+  metadata:
+    name: web-app-service
+  spec:
+    selector:
+      app: webapp1
+    ports:
+      - protocol: TCP
+        port: 80
+ ```
+
+ Let's now deploy this on k8s cluster using `kubectl create -f web-app-service.yaml` and see the deployed service using `kubectl get svc` 
+   <img src="comm4.png" width="600" /> 
+   &nbsp;<br>
+
+* Whenever a Pod is created, kubernetes injects some environment variables into the pod's environment, these environment variables can be used by containers in the pod to interact with the cluster. So, whenever you create a service, the address of the service will be injected as an environment variable to all the Pods that run within the same namespace. If you exec into any of the pod and run env command, you will see all the variables that are exported by K8s. 
+   <img src="comm5.png" width="600" /> 
+   &nbsp;<br>
+* Let's create a job to test this quickly. Instead of using Pod IPs or ClusterIP directly, we are using environment variables to dynamically infer the service IP and service port. Let's create a manifest for this job. (job-env.yaml) 
+ ```
+  apiVersion: batch/v1
+  kind: Job
+  metadata:
+    name: client-job
+  spec:
+    template:
+      spec:
+        containers:
+          - name: client
+            image: byrnedo/alpine-curl
+            command:
+              [
+                "/bin/sh",
+                "-c",
+                "curl -s http://${WEB_APP_SERVICE_SERVICE_HOST}:${WEB_APP_SERVICE_SERVICE_PORT}",
+              ]
+        restartPolicy: Never
+    backoffLimit: 4 
+ ``` 
+
+ * Deploy this job on k8s using `kubectl create -f job-env.yaml` and check logs of the pod created with this job using `kubectl logs <pod_name>`. 
+    <img src="comm6.png" width="600" /> 
+   &nbsp;<br> 
+
+ * The service is working properly as expected and we are able to address the service as desired. In this way we can communicate using environment variables of pod. 
+
+ * There is one another way to do this i.e. by using service names. we create a service by name web-app-service, the URL http://web-app-service should be routed to the web-server pod properly. (on port 80 by default), any URL http://web-app-service:xxxx should be routed to the web-server pod at xxxx port. Kubernetes DNS takes care of name resolution. Let's redeploy the job by making this modification (client-job-dns.yaml) 
+ ```
+  apiVersion: batch/v1
+  kind: Job
+  metadata:
+    name: client-job-dns
+  spec:
+    template:
+      spec:
+        containers:
+        - name: client
+          image: byrnedo/alpine-curl
+          command: ["curl", "-s", "http://web-app-service"]
+        restartPolicy: Never
+    backoffLimit: 4
+ ``` 
+
+* Let's deploy the job and see the logs. You will get output as follows: 
+  <img src="comm7.png" width="600" /> 
+   &nbsp;<br> 
+
+* **Communicating between services across namespaces** :
+  - Till now all our deployments and jobs were in a single namespace. If the web-app and the client job are in different namespaces, we cannot communicate using environment variables, as Kubernetes doesn't inject variables from other namesapces. We cannot use just service names like web-app-service as they are valid only within the namespace. 
+  - Kubernetes has an answer for this problem as well. If we have cluster-aware DNS service like CoreDNS running, we can use fully qualified DNS names. starting from cluster.local Assume that our web-server is running in namespace test-namespace and has a service web-app-service defined. We can address this using an URL shown below: 
+     `web-app-service.test-namespace.svc.cluster.local` 
+
+    - .cluster.local : This is the root of our cluster DNS, every resource must be accessed from root.
+    - .svc : This tells we are accessing a service resource.
+    - test-namespace : This is the namespace where our web-app-service is defined.
+    - web-app-service: This is our service name.
+
+   - So the general format for addressing a service in another namespace is to use a fully qualified DNS name like the one shown above. It is always suitable to use URLs like this as they are universal and can be addressable anywhere throughout the cluster. Again here is the general format of the URL:
+    `{{service_name}}.{{namespace}}.svc.cluster.local`
