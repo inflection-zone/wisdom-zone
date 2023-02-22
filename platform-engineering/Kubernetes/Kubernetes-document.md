@@ -415,4 +415,187 @@
 
 # Helm 
 * Helm is the package manager for Kubernetes, focused on automating the Kubernetes applications lifecycle in a simple and consistent way. 
-* The objective of Helm is to make an easy and automated management (install, update, or uninstall) of packages for Kubernetes applications, and deploy them with just a few commands.
+* The objective of Helm is to make an easy and automated management (install, update, or uninstall) of packages for Kubernetes applications, and deploy them with just a few commands. 
+* As the Kuberenetes platform and ecosystem continued to expand, deploying one and only one Kubernetes configuration file (ie: a single YAML file) was not the norm anymore. There could be multiple clusters to deploy to and multiple resources to orchestrate inside Kubernetes. As the number of YAML files increased, where to even store these files became an issue. Enter Helm to solve these problems. 
+* If there is a need to orchestrate more than one Kubernetes resource and if there are multiple clusters with different configurations, you have a strong use case for leveraging Helm.
+* Software vendors and open source projects alike can benefit by providing Helm resources, such as a Helm Repository and Chart, as a way for consumers to install applications into Kubernetes clusters. 
+* Helm uses a packaging format called Charts. A **Helm Chart** is a collection of files that describe a set of Kubernetes resources.
+* Like other package manager formats based on convention, Helm Charts follow a directory structure/tree. The Helm Charts can be archived and sent to a Helm Chart Repository. 
+* In its current rendition, Helm is a client that is installed outside the Kubernetes cluster. It leverages kubectl to connect and interact with the Kubernetes cluster. Helm will use the connection information provided by kubectl. 
+* There are several methods for installing the Helm Client, depending on your operating system. Download your desired helm binary release from https://github.com/helm/helm/releases. Then extract the content and copy the extracted folder path. Add this path to your environment variable's path. 
+* **Benefits**:
+  - Offers Helm charts and repositories where you get everything necessary for deployment and its configurations. 
+  - Official Helm charts are up to date and maintained with new releases. 
+  - Allows you to jump between your preferred versions of the Helm chart. 
+  - Everything with just a single CLI command.
+* **Helm Chart**: 
+  - A Helm chart is a set of YAML manifests and templates that describes Kubernetes resources (Deployments, Secrets, CRDs, etc.) and defined configurations needed for the Kubernetes application, and is also easy to deploy in a Kubernetes cluster or in a single node with just one command. 
+  - Since Helm Charts are file-based and follow a convention-based directory structure, Charts can easily be stored in Chart Repositories. 
+  - Charts are installed and uninstalled into Kubernetes clusters.  
+  -  a running instance of a Chart is called a Release. 
+  - A Helm Chart is an executed template converting Chart definitions to Kubernetes manifests. 
+  - The four main components that are required for a Helm Chart to be executed are as follows:
+    - chart.yaml : It has required information describing what the Chart is about, with a name and version. There is more information that can be included in the Chart.yaml, but that is the minimum.
+    - values.yaml : This is the file where you define values to be injected/interpreted by the templates. It contains the default configuration values for this chart
+    - Charts Directory : A directory containing any charts upon which this chart depends.
+    - Templates Directory: A directory of templates that, when combined with values, will generate valid Kubernetes manifest files. 
+
+* **Helm Architecture**: Helm, internally, is just an executable that you install in your environment to interact with your Kubernetes cluster. There are officially two components in Helm v3:
+   - **The Helm Client**: The CLI for end users. The component in charge of:
+     - Local chart development 
+     - Managing repositories and releases
+     - Helm Library interaction to execute the users demands (sending charts to be installed or requesting upgrading or uninstalling existing releases) 
+  
+   - **The Helm Library**: The logic for Helm operations execution: 
+     - The component that communicates with the Kubernetes API through the Kubernetes client library. 
+     - It doesn’t need its own database. Instead, it stores the information in Kubernetes secrets. 
+     - Combines charts and configurations to build a release. 
+     - Installs, upgrades, or uninstall charts (and its correspondent resources) to your Kubernetes cluster. 
+     - Encapsulates the helm logic, which allows portability between different systems. 
+  
+* **How to Use Helm**: The Helm CLI is the component that allows the user to interact with Helm and Kubernetes (through Helm). 
+
+* Step 1: Create two microservices & save them in a folder. Create their docker images and push them to docker repository. For source code please refer github repo: https://github.com/Priyanka-Inflectionzone/node-apps-helm
+* Step 2: Write two manifest for deployment object and service for those microservices. Refer following manifest files:
+ manifest for app1 (manifest.yaml):
+
+  ```
+   apiVersion: apps/v1
+   kind: Deployment
+   metadata:
+     creationTimestamp: null
+     namespace: default
+     name: app1
+     labels:
+       app: app1
+   spec:
+     replicas: 1
+     selector:
+       matchLabels:
+         app: app1
+     strategy: {}
+     template:
+       metadata:
+         creationTimestamp: null
+         labels:
+           app: app1
+       spec:
+         containers:
+           - image: priyankainflectionzone/node-apps:app1
+             name: app1-container
+             imagePullPolicy: Always
+             resources: {}
+             ports:
+               - containerPort: 3000
+             env:
+               - name: APP_2
+                 value: app2:3002
+   status: {}
+
+   ---
+   apiVersion: v1
+   kind: Service
+   metadata:
+     name: app1
+     labels:
+       run: app1
+   spec:
+     ports:
+       - port: 3000
+         protocol: TCP
+     selector:
+       app: app1
+     type: NodePort
+  ```
+
+Manifest for app2 (manifest2.yaml):
+  ```
+   apiVersion: apps/v1
+   kind: Deployment
+   metadata:
+     creationTimestamp: null
+     namespace: default
+     name: app2
+     labels:
+       app: app2
+   spec:
+     replicas: 1
+     selector:
+       matchLabels:
+         app: app2
+     strategy: {}
+     template:
+       metadata:
+         creationTimestamp: null
+         labels:
+           app: app2
+       spec:
+         containers:
+           - image: priyankainflectionzone/node-apps:app2
+             name: app2-container
+             imagePullPolicy: Always
+             resources: {}
+             ports:
+               - containerPort: 3002
+   status: {}
+
+   ---
+   apiVersion: v1
+   kind: Service
+   metadata:
+     name: app2
+     labels:
+       run: app2
+   spec:
+     ports:
+       - port: 3002
+         protocol: TCP
+     selector:
+       app: app2
+     type: NodePort 
+  ``` 
+* Step 3: Open terminal in the same folder you have created your microservices & manifest files. Now we have to create a helm chart to deploy these manifests. So in terminal, run command `helm create <name>`. Replace <name> with your desired name of chart directory. You may see the following output. 
+    <img src="helm 1.png" width="600" /> 
+   
+  Open folder in VS Code, you will see the chart structure as shown below: 
+
+  <img src="helm2.png" width="600" /> 
+   &nbsp;<br> 
+
+* Step 4: Step into templates folder. You may see many readymade templates of manifests for various objects are created automatically.  
+    <img src="helm3.png" width="600" /> 
+   &nbsp;<br> 
+  
+  If you want them you may keep them but for now we don't want any of them as we have created our own manifest files. So delete unwanted yaml files from template folder and move our created manifest files to this folder. The chart structure will look like: 
+  <img src="helm4.png" width="600" /> 
+   &nbsp;<br> 
+
+* Step 5: Now go to terminal and run command `helm install mychart mychart`. This will deploy all your objects on k8s cluster in one go. 
+  <img src="helm5.png" width="600" /> 
+   &nbsp;<br> 
+ Here we can see what exactly get deployed here by this helm install command. To check this run command `kubectl get all`. This will give you all the objects that are deployed on k8s cluster. 
+  <img src="helm6.png" width="600" /> 
+   &nbsp;<br> 
+
+* Step 6: To check running services on localhost, we need to port forward of services as follows: 
+  <img src="helm6a.png" width="600" /> 
+   &nbsp;<br> 
+
+  <img src="helm6b.png" width="600" /> 
+   &nbsp;<br>  
+
+  Now go to browser and browse these services on respective ports as follows: 
+  <img src="helm7.png" width="600" /> 
+   &nbsp;<br> 
+   <img src="helm8.png" width="600" /> 
+   &nbsp;<br> 
+   <img src="helm9.png" width="600" /> 
+   &nbsp;<br> 
+
+  Here we can see that both the services are communicating with each other as from service-1's port we are calling service-2 and we can see the response as well. 
+
+* Step 7: Using single command `helm uninstall mychart`, we can delete all the deployed objects on k8s cluster in one go as shown: 
+  <img src="helm10.png" width="600" /> 
+   &nbsp;<br> 
+
+# Interservice Communication in K8s
