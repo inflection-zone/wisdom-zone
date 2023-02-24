@@ -736,4 +736,83 @@
     - web-app-service: This is our service name.
 
    - So the general format for addressing a service in another namespace is to use a fully qualified DNS name like the one shown above. It is always suitable to use URLs like this as they are universal and can be addressable anywhere throughout the cluster. Again here is the general format of the URL:
-    `{{service_name}}.{{namespace}}.svc.cluster.local`
+    `{{service_name}}.{{namespace}}.svc.cluster.local` 
+
+# RabbitMQ:
+* RabbitMQ is a message-queueing software also known as a message broker or queue manager. 
+* It is software where queues are defined, to which applications connect in order to transfer a message or messages. 
+* We push messages to queues where they can be stored until they are processed or consumed. 
+  <img src="rabbitmq1.png" width="600" /> 
+   &nbsp;<br> 
+
+* As shown in picture, we have a producer that produces the message and send it to rabbitmq broker.
+* We are having two different entities inside the rabbitmq that are exchange and queue. When the message is produced by the producer, it will first arrive at exchange. Then the role of exchange is to route that message to a specific queue. In this case, we are having only one queue so it reaches to the queue.
+* There is one more player called consumer which continuously listening to the queue and as soon as a new message arrives at the queue it is received by the consumer. 
+* Advantages of RabbitMQ: 
+   1. Flexible Routing: As we know the exchange has a role to route the message to a particular queue, there are different types of routings. This will help us to cover different use cases or real world problems. So for a certain problem, we use certain type of routing. 
+   2. Guaranteed message delivery: Lets consider that producer produces a message taht is routed to the queue by exchange but our consumer is not online to receive that message. So the thing is message does not lost because it is get stored at queue until it is processed or consumed by the consumer. Also we can send aknowledgement to the producerr so that it knows that the message is delivered or not. 
+   3. Libraries: RabbitMQ has libraries for different popular programming languages such as javascript, python, c-sharp, java, ruby etc. So you can implement RabbitMQ with your favourite programming language. 
+   4. Fast & reliable: It supports synchronus and asynchronus tasks. 
+   
+*  Connection between exchange and queue is called as binding.
+* RabbitMQ has four different exchange types: 
+   - Fanout Exchange  
+   - Direct Exchange 
+   - Topic Exchange
+   - Headers Exchange 
+   Based on these types, exchange would know how to route the message and to which queue. 
+   - **Fanout Exchange**: In this type of exchange, exchange routes the message to each queue connected to it as shown in following picture: 
+      <img src="fanout.png" width="600" /> 
+   &nbsp;<br> 
+
+    So, in fanout type of exchange, the message produced by the producer is get received by all the consumer applications or microservices. We can use this type of exchange in transaction service which sends message containing transaction details to lets say sms service, email service and pdf service.  
+
+    - **Direct Exchange**: In this type of exchange, producer sends a message having an extra attribute called "routing key" having some value. Also the bindings are having attributes called as "binding key". So the exchange type of direct, routes the message to the queue having binding key = routing key. As shown in following image: 
+      <img src="direct.png" width="600" /> 
+      &nbsp;<br> 
+    
+    Consider an example of microservices containing logger, error, warning and info services. In this case, we can use direct exchange as shown in following image: 
+       <img src="direct_ex.png" width="600" /> 
+      &nbsp;<br> 
+
+    - **Topic Exchange**: In this type of exchange, the routing key is made up of a pattern called topic in which many keys are separated with dot. We can see it using following example:
+      <img src="topic.png" width="600" /> 
+      &nbsp;<br>  
+
+* Let's get started with RabbitMQ and Node.js: 
+  - **Step1**: First create a e-commerce project having three microservices i.e. auth, product and order service. You may find the source code at following git repository: https://github.com/Priyanka-Inflectionzone/rabbitmq-ecommerce.git  
+  - **Step2**: Here we are using mongodb as database for storing user, product and order information. Also we are using JWT for auth, express and amqplib for rabbitmq. So we need to install all these. 
+  - **Step3**: Then open a terminal and change directory to auth-service. Run the service using command `node index.js`. Then we get console output as service is running at given port as shown below: 
+    <img src="rmq1.png" width="600" /> 
+      &nbsp;<br> 
+  - **Step4**: Next open Postman. Create new collection as ecommerce and add new post request to "http://localhost:7070/auth/register" as shown in below image: 
+    <img src="rmq2.png" width="600" /> 
+      &nbsp;<br> 
+  - **Step5**: New user is registered now. Next we need to login so add new post request to postman at auth/login as shown below. Here you will get a token. Cpoy that and go to headers, add new header as authorization and paste the token at value field.
+    <img src="rmq3.png" width="600" /> 
+      &nbsp;<br> 
+
+  - **Step6**: Now open a new terminal and change directory to product-service. Run this service using command `node index.js`.
+    <img src="rmq4.png" width="600" /> 
+      &nbsp;<br> 
+
+  - **Step7**: Open postman and add new post request at http://localhost:8080/product/create as shown in image below: 
+      <img src="rmq5.png" width="600" /> 
+      &nbsp;<br> 
+
+  - **Step8**: Add few more products to the table by using postman requests. Here I have added 4 products as shown below: 
+     <img src="rmq6.png" width="600" /> 
+      &nbsp;<br>
+  - **Step9**: Next go to terminal, open new terminal and change directory to order-service. And run the service using `node index.js`. As shown in image below our order-service is running on port 9090. 
+     <img src="rmq7.png" width="600" /> 
+      &nbsp;<br> 
+  - **Step10**: Now go to postman and add new post request to product/buy. Add product ids in body and send request. 
+     <img src="rmq8.png" width="600" /> 
+      &nbsp;<br> 
+  - Next go to terminal of order-service. We can see a message there as "Consuming Order-service". That means the message sent by product-service to buy the products is consumed by the order service. 
+     <img src="rmq9.png" width="600" /> 
+      &nbsp;<br> 
+
+  - We can also see that one order entry is added to the order-service database table as shown in image below: 
+      <img src="rmq10.png" width="600" /> 
+      &nbsp;<br>
