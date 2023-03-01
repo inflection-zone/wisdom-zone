@@ -815,4 +815,57 @@
 
   - We can also see that one order entry is added to the order-service database table as shown in image below: 
       <img src="rmq10.png" width="600" /> 
-      &nbsp;<br>
+      &nbsp;<br> 
+
+# Istio 
+* **Service Mesh**: 
+   - A service mesh is a dedicated infrastructure layer that you can add to your applications which allows you to transparently add capabilities like observability, traffic management, and security, without adding them to your own code. 
+   - As the deployment of distributed services or microservices, such as in a Kubernetes-based system, grows in size and complexity, it can become harder to understand and manage. 
+   - Its requirements can include discovery, load balancing, failure recovery, metrics, and monitoring. A service mesh also often addresses more complex operational requirements, like A/B testing, canary deployments, rate limiting, access control, encryption, and end-to-end authentication. 
+   - Service-to-service communication is what makes a distributed application possible. Routing this communication, both within and across application clusters, becomes increasingly complex as the number of services grow. 
+   - Istio helps reduce this complexity while easing the strain on development teams.
+
+* **What Is Istio**: 
+   - Istio is an open source service mesh that layers transparently onto existing distributed applications. 
+   - Istio’s powerful features provide a uniform and more efficient way to secure, connect, and monitor services. 
+   - Istio is the path to load balancing, service-to-service authentication, and monitoring – with few or no service code changes. 
+   - Features of Istio include: 
+     - Secure service-to-service communication in a cluster with TLS encryption, strong identity-based authentication and authorization. 
+     - Automatic load balancing for HTTP, gRPC, WebSocket, and TCP traffic 
+     - Fine-grained control of traffic behavior with rich routing rules, retries, failovers, and fault injection 
+     - A pluggable policy layer and configuration API supporting access controls, rate limits and quotas
+     - Automatic metrics, logs, and traces for all traffic within a cluster, including cluster ingress and egress 
+
+  - Istio’s control plane runs on Kubernetes, and you can add applications deployed in that cluster to your mesh, extend the mesh to other clusters, or even connect VMs or other endpoints running outside of Kubernetes. 
+  - A large ecosystem of contributors, partners, integrations, and distributors extend and leverage Istio for a wide variety of scenarios. 
+
+* **Architecture**: 
+  - An Istio service mesh is logically split into a data plane and a control plane. 
+  - The data plane is composed of a set of intelligent proxies (Envoy) deployed as sidecars. 
+  - These proxies mediate and control all network communication between microservices. They also collect and report telemetry on all mesh traffic. 
+  - The control plane manages and configures the proxies to route traffic. 
+  - The following diagram shows the architecture of Istio: 
+      <img src="istio1a.png" width="600" /> 
+      &nbsp;<br> 
+  - Components: 
+    - Envoy: 
+      - Envoy is a high-performance proxy developed in C++ to mediate all inbound and outbound traffic for all services in the service mesh. 
+      - Envoy proxies are the only Istio components that interact with data plane traffic. 
+      - Envoy proxies are deployed as sidecars to services, logically augmenting the services with Envoy’s many built-in features, for example: 
+         - Dynamic service discovery 
+         - Load balancing 
+         - TLS termination
+         - HTTP/2 and gRPC proxies
+         - Circuit breakers
+         - Health checks
+         - Staged rollouts with %-based traffic split
+         - Fault injection
+         - Rich metrics 
+      - This sidecar deployment allows Istio to enforce policy decisions and extract rich telemetry which can be sent to monitoring systems to provide information about the behavior of the entire mesh.
+      - The sidecar proxy model also allows you to add Istio capabilities to an existing deployment without requiring you to rearchitect or rewrite code. 
+
+    - Istiod: 
+      - Istiod provides service discovery, configuration and certificate management. 
+      - Istiod converts high level routing rules that control traffic behavior into Envoy-specific configurations, and propagates them to the sidecars at runtime. 
+      - Pilot abstracts platform-specific service discovery mechanisms and synthesizes them into a standard format that any sidecar conforming with the Envoy API can consume. 
+    
