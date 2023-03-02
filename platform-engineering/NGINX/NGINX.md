@@ -62,8 +62,11 @@ NGINX uses a predictable process model that is tuned to the available hardware r
 
 6.  Then go to Settings tab => Network => Adapter1 => Select Bridged Adapter
     <img src="install4.png" width="600" height="300"/>
-
-&nbsp;<br> 7. Start VM & login with password. 8. Update VM with `sudo apt-get update`. (You may continue with existing user or switch to root user using `su root` & enter password. If root user you need not to write “sudo” keyword before every command.) 9. Install NGINX using `apt-get install nginx` command.
+    &nbsp;<br>
+    
+7.  Start VM & login with password. 
+8.  Update VM with `sudo apt-get update`. (You may continue with existing user or switch to root user using `su root` & enter password. If root user you need not to write “sudo” keyword before every command.) 
+9.  Install NGINX using `apt-get install nginx` command.
 
 - Once completed, check version using `nginx -v`.
 - You may also check in browser whether nginx is installed properly on your VM using following steps:
