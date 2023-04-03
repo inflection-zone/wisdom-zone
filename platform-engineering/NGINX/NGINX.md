@@ -20,7 +20,7 @@
 
 # Architecture of NGINX
 
-   <img src="NGINX architecture.png" width="600" height="250"/>
+   <img src="./Images/NGINX architecture.png" width="600" height="250"/>
 
 NGINX uses a predictable process model that is tuned to the available hardware resources:
 
@@ -35,7 +35,7 @@ NGINX uses a predictable process model that is tuned to the available hardware r
 2.  Download Ubuntu ISO desktop image from https://ubuntu.com/download/desktop. (Download LTS version).
 3.  Inside Virtualbox, click on New. You will see following screen.
 
-     <img src="InstallStep1.png" width="600" height="300"/>
+     <img src="./Images/InstallStep1.png" width="600" height="300"/>
 
         - Give proper name to your VM in 'Name' field.
         - Select downloaded Ubuntu ISO image at “ISO Image” field.
@@ -45,7 +45,7 @@ NGINX uses a predictable process model that is tuned to the available hardware r
 
 4.  You will see thr screen as :
 
-    <img src="install2.png" width="600" height="300"/>
+    <img src="./Images/install2.png" width="600" height="300"/>
 
         - Give Username & password of your choice. Click on Next
 
@@ -53,7 +53,7 @@ NGINX uses a predictable process model that is tuned to the available hardware r
 
 5.  Next you have to configure your VM’s hardware configs.
 
-    <img src="install3.png" width="600" height="300"/>
+    <img src="./Images/install3.png" width="600" height="300"/>
 
         - Select at least 2GB RAM & 1 Processor. Click on Next.
         - Select Create a Virtual Hard Disk. Click Next & Finish
@@ -61,7 +61,7 @@ NGINX uses a predictable process model that is tuned to the available hardware r
     &nbsp;<br>
 
 6.  Then go to Settings tab => Network => Adapter1 => Select Bridged Adapter
-    <img src="install4.png" width="600" height="300"/>
+    <img src="./Images/install4.png" width="600" height="300"/>
 
 &nbsp;<br> 7. Start VM & login with password. 8. Update VM with `sudo apt-get update`. (You may continue with existing user or switch to root user using `su root` & enter password. If root user you need not to write “sudo” keyword before every command.) 9. Install NGINX using `apt-get install nginx` command.
 
@@ -71,7 +71,7 @@ NGINX uses a predictable process model that is tuned to the available hardware r
   - Check IP address of your VM using “ip addr” command.
   - Hit this IP in the browser & you may get response like:
 
-   <img src="nginxRes1.png" width="600" height="300"/>
+   <img src="./Images/nginxRes1.png" width="600" height="300"/>
 
 &nbsp;<br>
 
@@ -83,7 +83,7 @@ NGINX uses a predictable process model that is tuned to the available hardware r
   `nginx -t`
   The output will look something like this:
 
-  <img src="nginx-t.png" width="600" height="300"/>
+  <img src="./Images/nginx-t.png" width="600" height="300"/>
   &nbsp;<br>
 
 8. Check firewall status.
@@ -91,7 +91,7 @@ NGINX uses a predictable process model that is tuned to the available hardware r
 - Use `ufw status` to check whether firewall is active or not. If inactive use `ufw enable` to enable firewall.
 - “ufw app list” lists firewall rules.
 
-   <img src="firewall.png" width="600" height="300"/>
+   <img src="./Images/firewall.png" width="600" height="300"/>
 
 - `ufw allow Nginx Full` allows both HTTP & HTTPS rules.
 - The syntax to list all the current rules in a numbered list format: `ufw status numbered`.
@@ -136,7 +136,7 @@ NGINX uses a predictable process model that is tuned to the available hardware r
 
 Here is an example of nginx.conf file:
 
-  <img src="nginx.conf.png" width="600" height="300"/>
+  <img src="./Images/nginx.conf.png" width="600" height="300"/>
 
 &nbsp;<br>
 
@@ -207,7 +207,7 @@ Here is an example of nginx.conf file:
 
 3. Check nginx.conf file for “include /etc/nginx/conf.d/\*.conf”. It indicates that nginx will consider all “.conf” files inside conf.d directory as configuration files while running applications.
 
-  <img src="include.png" width="600" height="300"/>
+  <img src="./Images/include.png" width="600" height="300"/>
 &nbsp;<br>
 
 4. Once all configurations have been done, test config file for syntax error if any using `nginx -t` command.
@@ -216,18 +216,18 @@ Here is an example of nginx.conf file:
 6. If everything is fine, check your application by running it locally using `lynx http://IP address of VM`. (If 'lynx' is not installed on your VM, get it using `apt-get install lynx`)
 7. You may also check it in browser by hitting our VM’s IP address.
 
-  <img src="welcome1.png" width="600" height="300"/>
+  <img src="./Images/welcome1.png" width="600" height="300"/>
 
 &nbsp;<br>
 
-  <img src="welcome2.png" width="600" height="300"/>
+  <img src="./Images/welcome2.png" width="600" height="300"/>
 
 # Forward and reverse proxy
 
 - A proxy server, sometimes referred to as a **forward proxy**, is a server that routes traffic between client(s) and another system, usually external to the network. By doing so, it can regulate traffic according to preset policies, convert and mask client IP addresses, enforce security protocols, and block unknown traffic.
 - A **reverse proxy** is a type of proxy server. Unlike a traditional proxy server, which is used to protect clients, a reverse proxy is used to protect servers. Reverse proxy enables computers on internet to access resources on a private network.
 
-<img src="proxy.png" width="600" height="250"/>
+<img src="./Images/proxy.png" width="600" height="250"/>
 
 # Deploy a node.js based web app using NGINX:
 
@@ -271,12 +271,12 @@ server {
 7. If successful, restart the nginx service. Also run the main.js file.
 8. Check using lynx or curl `curl VM’s IP`. You will get response of node.js based application. You may also check this in browser by hitting VM’s IP.
 
-<img src="nodeapp.png" width="600" height="300"/>
+<img src="./Images/nodeapp.png" width="600" height="300"/>
 &nbsp;<br>
 
 **Note**: Hosting dynamic website using NGINX is not possible. It will use proxying to host dynamic content.
 
-<img src="mediators.png" width="600" height="300"/>
+<img src="./Images/mediators.png" width="600" height="300"/>
 &nbsp;<br>
 
 - In this application, we have used “upstream” for proxying.
@@ -320,18 +320,18 @@ server {
 4. Restart nginx service using `systemctl restart nginx`. Run both node applications.
 5. Check response locally using `curl IP address of VM` (or `lynx http://IP address of VM`).
 
-<img src="lb1.png" width="600" height="300"/>
+<img src="./Images/lb1.png" width="600" height="300"/>
 &nbsp;<br>
 
-<img src="lb2.png" width="600" height="300"/>
+<img src="./Images/lb2.png" width="600" height="300"/>
 &nbsp;<br>
 
 6. Also check in the browser by hitting IP address of VM. Try reloading the page. You may see that once it is giving response from 1st node server & next time from 2nd server.
 
-<img src="lb3.png" width="600" height="300"/>
+<img src="./Images/lb3.png" width="600" height="300"/>
 &nbsp;<br>
 
-<img src="lb4.png" width="600" height="300"/>
+<img src="./Images/lb4.png" width="600" height="300"/>
 &nbsp;<br>
 
 7. **Note**: This type of loadbalancer is called as simple loadbalancer. It is using Round Robin algorithm.
@@ -370,7 +370,7 @@ upstream load1 {
 4.  Change permissions of root directories by `sudo chmod -R 755 /var/www` command.
 5.  Create sample pages for each site. - Create an index.html file in your first domain:
     `vi /var/www/example.com/html/index.html` - Inside the file, we’ll create a really basic file that indicates what site we are currently accessing.
-    <img src="example1.png" width="600" height="300"/>
+    <img src="./Images/example1.png" width="600" height="300"/>
     &nbsp;<br>
 
         - Repeat these steps for second domain too. Just replace "example.com” with “test.com”
@@ -410,23 +410,23 @@ upstream load1 {
 9.  Modify local hosts file for testing: `sudo vi /etc/hosts`
     You need to know your server’s public IP address and the domains you want to route to the server. Let server’s public IP address is 192.168.29.157, the lines we would add to file would look something like this:
 
-   <img src="hosts.png" width="600" height="250"/>
+   <img src="./Images/hosts.png" width="600" height="250"/>
 &nbsp;<br>
 
 10. Save & close file. Restart NGINX by using `sudo systemctl restart nginx`.
 
 11. Test your results locally using `lynx http://example.com.` And `lynx http://test.com`
 
-<img src="example2.png" width="600" height="300"/>
+<img src="./Images/example2.png" width="600" height="300"/>
 &nbsp;<br>
 
-<img src="test1.png" width="600" height="300"/>
+<img src="./Images/test1.png" width="600" height="300"/>
 &nbsp;<br>
 
 12. You may also test results using browser:
 
-<img src="example3.png" width="600" height="300"/>
+<img src="./Images/example3.png" width="600" height="300"/>
 &nbsp;<br>
 
-<img src="test2.png" width="600" height="300"/>
+<img src="./Images/test2.png" width="600" height="300"/>
 &nbsp;<br>
