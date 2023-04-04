@@ -6,7 +6,7 @@
     * We are having a simple application that uses node.js for a server that will process all requests to either add, get,  update or delete users from a database.
     * Here we need to create two separate dockerfiles for frontend and backend services. And then we will add NGINX configuration file and then we will dockerize NGINX as well. 
     * To combine the whole application and spin all the containers at the same time, we will use docker compose.
-    * One may find the source code for this application here: https://github.com/Priyanka-Inflectionzone/docker-compose-nginx-demo 
+    * One may find the source code for this application here: https://github.com/Priyanka-Inflectionzone/docker-compose-nginx
 
 * **Steps:**
     1. Create a dockerfile for backend server. 
