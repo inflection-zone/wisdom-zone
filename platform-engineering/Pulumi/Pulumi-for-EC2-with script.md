@@ -165,6 +165,58 @@
 
         `$ car rsa | pulumi config set privatekey --secret --`
 
+     &nbsp;<br> 
+
+    11. Then we will write code to add public and private key.
+    ```
+        let keyName: pulumi.Input<string> | undefined = config.get("keyName");
+        const publicKey = config.get("publicKey");
+
+        const privateKey = config.requireSecret("privateKey").apply(key => {
+            if (key.startsWith("-----BEGIN RSA PRIVATE KEY-----")) {
+                return key;
+            } else {
+                return Buffer.from(key, "base64").toString("ascii");
+            }
+        }); 
+
+        if (!keyName) {
+            if (!publicKey) {
+                throw new Error("must provide one of `keyName` or `publicKey`");
+            }
+            const key = new aws.ec2.KeyPair("key", { publicKey });
+            keyName = key.keyName;
+        }
+
+    ```
+    &nbsp;<br> 
+
+    12. Finally write code to create EC2 instance. 
+    ```
+        const server = new aws.ec2.Instance("web-server", {
+            instanceType: "t2.micro",
+            vpcSecurityGroupIds: [ devSG.id ], // reference the security group resource above
+            ami: "ami-02eb7a4783e7e9317",
+            subnetId: publicSubnet.id,
+            keyName: keyName,
+            userData: userData,
+        }); 
+    ```
+    &nbsp;<br> 
+
+    13. Now open terminal and run command `pulumi update`. You may see the list of resources to be created. Then select yes when asked whether to create these resources. Finally you may see that your resources are creating. 
+
+    14. You may login to your AWS console to verify the created resources. You may also connect to your EC2 instance to check running application containers. For that you have to open mobaxterm (or putty) from your system. Copy the public IP of instance and paste it to login from mobaxterm. Then write username "ubuntu". Go to advanced ssh settings. Here add your private key (i.e. rsa) file located on your system. And you will be logged into instance.
+
+    
+
+
+
+
+    
+ 
+
+
 
 
     
