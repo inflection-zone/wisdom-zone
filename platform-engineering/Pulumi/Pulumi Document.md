@@ -58,20 +58,13 @@
   * **State and Backends**: Pulumi stores metadata about your infrastructure so that it can manage your cloud resources. This metadata is called state. Each stack has its own state, and state is how Pulumi knows when and how to create, read, delete, or update cloud resources.
 
 
-# Sample Example-1:
-  * Prerequisites:
-  To get started with pulumi demo project, we need to have:
-   1. An AWS account, AWS CLI installed & configured.
-   2. Install language runtime. (Node.js for javascript & typescript) 
-   3. Install Pulumi with following link according to your OS:
-        https://www.pulumi.com/docs/get-started/install/
-   
- * After installating Pulumi, verify everything is in working order by running the pulumi CLI. 
+# Sample Example-1:   
+ * Check whether Pulumi is installed on system. 
 ```
     > pulumi version
     v3.51.1`
 ``` 
-* Now that we have set up our environment by installing Pulumi, installing our preferred language runtime (i.e. node.js as we are creating project using typescript), and configuring your AWS credentials, let’s create our first Pulumi program with following steps:
+* Now that we have set up our environment, let’s create our first Pulumi program with following steps:
  1. Open command prompt & create new directory using `$ mkdir pulumidemo`. Next go into that directory `$ cd pulumidemo`.
  2. Create new Pulumi project using command `$ pulumi new aws-typescript`.
     **Note**: If this is your first time running pulumi new or other pulumi commands, you may be prompted to log in to the Pulumi Service. Hitting Enter at the prompt opens a browser for you to sign in or sign up.

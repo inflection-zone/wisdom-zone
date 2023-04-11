@@ -1,7 +1,6 @@
 # Pulumi code to launch AWS EC2 instance with script 
 * In this tutorial, we will write a pulumi code for an EC2 instance with userdata script. 
 * The launched instance will have docker and docker compose installed on it and also able to clone git repository and run the containers. 
-* For this tutorial one should have 'pulumi' installed on system and basic knowledge of pulumi-aws.
 * Let's start the tutorial step by step:
     1. Create a new folder and start pulumi project in that repository using following commands on your terminal. Here we will select aws-region: 'ap-south-1'
     `$ mkdir pulumi-demo && cd pulumi-demo`
@@ -149,7 +148,7 @@
         # Install git and clone git repository
         apt-get install git
         mkdir Project && cd Project
-        sudo git clone https://Priyanka-Inflectionzone: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@github.com/Priyanka-Inflectionzone/docker-compose-nginx.git 
+        sudo git clone https://<github_username>:<github_PAT>@github.com/<github_username>/<repository name>.git 
         cd docker-compose-nginx
         docker compose up --build -d`;
     ``` 
