@@ -67,7 +67,7 @@
 * Now that we have set up our environment, let’s create our first Pulumi program with following steps:
  1. Open command prompt & create new directory using `$ mkdir pulumidemo`. Next go into that directory `$ cd pulumidemo`.
  2. Create new Pulumi project using command `$ pulumi new aws-typescript`.
-    **Note**: If this is your first time running pulumi new or other pulumi commands, you may be prompted to log in to the Pulumi Service. Hitting Enter at the prompt opens a browser for you to sign in or sign up.
+   > **Note**: If this is your first time running pulumi new or other pulumi commands, you may be prompted to log in to the Pulumi Service. Hitting Enter at the prompt opens a browser for you to sign in or sign up.
  3. After logging in, the CLI will proceed with walking you through creating a new project. 
     - First, you will be asked for a project name and project description. Hit ENTER to accept the default values or specify new values. 
     - Next, you will be asked for a stack name. Hit ENTER to accept the default value of dev.

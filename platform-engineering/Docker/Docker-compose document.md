@@ -25,7 +25,7 @@
 
 The Docker architecture uses a client-server model and comprises of the Docker Client, Docker Host, Network and Storage components, and the Docker Registry / Hub.
 
-<img src="architecture.png" width="600"/>
+<img src="./Images/architecture.png" width="600"/>
 
 **Docker Client**
 
@@ -179,25 +179,25 @@ networks:
 7. Open terminal inside your service folder. Write command `docker-compose up --build`.
    ("docker-compose up" command starts the containers. "--build" option build images before starting containers.)
 
-  <img src="output.png" width="600"/>
+  <img src="./Images/output.png" width="600"/>
 
 8. You may see your built image & list of all other images using `docker images` or `docker image ls` command.
 
-<img src="images list.png" width="600"/>
+<img src="./Images/images list.png" width="600"/>
 
 9. To see list of running containers, use "docker ps" command. To see list of all running and exited containers, use "docker ps -a" command.
 
-<img src="containers list.png" width="600"/>
+<img src="./Images/containers list.png" width="600"/>
 
 10. You may access your containers using `docker exec -it <container name> /bin/bash` command.
     (If bash is not installed you may use `docker exec -it <container name> /bin/sh`)
 
 11. Inside database container, login to mysql using `mysql -u<username> -p` command. It will prompt you to enter password. \* After login you may see databases, tables, use other mysql commands.
 
-<img src="mysqlcontainer.png" width="600"/>
+<img src="./Images/mysqlcontainer.png" width="600"/>
 
 12. Send API requests from postman and you can see changes in database in container as well.
 
-<img src="postman.png" width="600"/>
+<img src="./Images/postman.png" width="600"/>
 
-<img src="containerResponse.png" width="600"/>
+<img src="./Images/containerResponse.png" width="600"/>

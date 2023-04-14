@@ -7,8 +7,10 @@
 * Open folder in Visual Studio Code. Start editing index.ts file as given below in this document.
 
 * First step is to import necessary modules. For that write following lines:
-    `import * as pulumi from "@pulumi/pulumi";`
-    `import * as aws from "@pulumi/aws";` 
+    ```
+        import * as pulumi from "@pulumi/pulumi";
+        import * as aws from "@pulumi/aws";
+    ```
 &nbsp;<br>
 
 * Then we will write code to create a VPC. For that we will use CIDR block: 10.0.0.0/16. Line of code are as following:
