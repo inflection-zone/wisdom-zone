@@ -76,8 +76,7 @@ Following are the steps to deploy a node.js application with mysql database to d
 
 3.  Download & install docker on your system.
 
-4.  Create a Dockerfile inside your service folder with name "Dockerfile":
-    (https://docs.docker.com/develop/develop-images/dockerfile_best-practices/)
+4.  Create a Dockerfile inside your service folder with name `Dockerfile`. Find Docker's official documentation for "Dockerfile- best practices" [here](https://docs.docker.com/develop/develop-images/dockerfile_best-practices/).
 
 - Click on create new file.
 - Name it as "Dockerfile".
@@ -115,8 +114,7 @@ EXPOSE 3000
 CMD ["npm","run","start"]
 ```
 
-5. Create a docker-compose file with yaml OR yml extension.(eg. docker-compose.yaml OR docker-compose.yml)
-   (https://www.youtube.com/watch?v=_JNTTgRDyBQ One can refer this video tutorial for creating & running docker compose file for node.js app using mysql database.)
+5. Create a docker-compose file with yaml OR yml extension.(eg. docker-compose.yaml OR docker-compose.yml). You may refer this [video tutorial](https://www.youtube.com/watch?v=_JNTTgRDyBQ) for creating & running docker compose file for node.js app using mysql database.
    Example of a docker-compose file:
 
 ```
@@ -174,7 +172,7 @@ networks:
 
 6. Go to .env file and change database configuration variable values according to your docker-compose file.
 
-**Note** : If you have mysql service running on your PC/host, you need to stop it first. If you don't stop it, it will throw error that port 3306 is already in use as by default mysql uses port 3306 on host & our container also try to access it.
+> **Note** : If you have mysql service running on your PC/host, you need to stop it first. If you don't stop it, it will throw error that port 3306 is already in use as by default mysql uses port 3306 on host & our container also try to access it.
 
 7. Open terminal inside your service folder. Write command `docker-compose up --build`.
    ("docker-compose up" command starts the containers. "--build" option build images before starting containers.)
@@ -192,7 +190,7 @@ networks:
 10. You may access your containers using `docker exec -it <container name> /bin/bash` command.
     (If bash is not installed you may use `docker exec -it <container name> /bin/sh`)
 
-11. Inside database container, login to mysql using `mysql -u<username> -p` command. It will prompt you to enter password. \* After login you may see databases, tables, use other mysql commands.
+11. Inside database container, login to mysql using `mysql -u<username> -p` command. It will prompt you to enter password. After login you can see databases, tables and use other mysql commands.
 
 <img src="./Images/mysqlcontainer.png" width="600"/>
 
@@ -200,4 +198,6 @@ networks:
 
 <img src="./Images/postman.png" width="600"/>
 
-<img src="./Images/containerResponse.png" width="600"/>
+<img src="./Images/containerResponse.png" width="600"/> 
+
+13. To stop and remove all the containers, use command `docker compose down`.
