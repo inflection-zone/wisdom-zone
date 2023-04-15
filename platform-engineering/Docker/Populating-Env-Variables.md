@@ -132,3 +132,40 @@ networks:
          &nbsp;<br> 
 
 ### 3. Using Dockerfile: 
+
+* We can pass environment variables in the Dockerfile as well. 
+* `ENV` instruction is used to set environment variables in Dockerfile. For example: `ENV VAR1=value`
+* These variables will be available to the container at runtime.
+* Example configuration:
+  -  Before we see how to pass environment variable values into a Dockerfile, let's build an example to test it out.
+  - We'll create a simple bash script called `greetings.sh`, which uses an environment variable to print greetings to the console:
+  ```
+    #!/bin/sh
+
+    echo Hello $name
+  ```
+
+  - Now we'll create a Dockerfile in the same directory:
+  ```
+    FROM alpine:latest
+
+    ENV name Priya
+
+    COPY greetings.sh .
+
+    RUN chmod +x /greetings.sh
+
+    CMD ["/greetings.sh"]
+  ```
+
+  - Now we'll build and run our image.
+  ```
+    $ docker build -t greetings .
+
+    $ docker run greetings
+  ```
+
+  - Here is our console output:
+
+  <img src="./Images/env-dockerfile.png" width="600" height="250"/>
+         &nbsp;<br> 
