@@ -169,3 +169,150 @@ networks:
 
   <img src="./Images/env-dockerfile.png" width="600" height="250"/>
          &nbsp;<br> 
+
+### 4. Using `.env` file: 
+* To pass environment variables in docker containers, there is one more way i.e. to have an `.env` file.
+* Essentially, an `.env` file is a list of key pair values that set specific variables for a container deployment.
+* A few things to keep in mind about .env files:
+  - The .env file is used during the pre-processing step with docker-compose.yml files.
+  - To pass variables from the .env file to the command, you use $ as in $DB_DATABASE.
+  - ENV values are available via docker-build or run commands (using the $ as explained above).
+  - ENV files allow you to pass multiple environment variables at once.
+  - You can pass the .env file variables to the docker run command using the –env-file options, for example: $ docker run –env-file .env mysql:latest
+
+* Let's create an `.env` file for our project. For that, go to project folder and create new file. Name it as `.env`.
+* Now suppose we have to pass one variable "API_BACKEND_URL" having value as "http://localhost:5000". Let's add it to our .env file as: `BACKEND_API_URL=http://localhost:3456` and save the file.
+* Now we will create a Dockerfile.
+* Then build a docker image out of dockerfile and run that image with `--env-file`. For example: `$ docker run --env-file .env app1:2.0 `
+
+  > **Note**: Make sure to use the full path to your .env file (if you’re not running the docker command from the same directory housing the file).
+
+* Your container will deploy and be ready to use. You may go to docker-desktop and check inside your container for `env` variables.
+  <img src="./Images/env-file.png" width="600" height="250"/>
+         &nbsp;<br>
+
+
+### 4. Using System Management Parameters: 
+
+* If you want to run docker containers on AWS EC2 instance, you may store environment variables in System Management Parameters store.
+* Then you may retrieve value of that parameter inside your EC2 instance (either in Userdata script or terminal of instance) and use it as environment variable to run a docker container.
+* For this method, you need to have an AWS account and your user must have permissions to create & access all the required resources.
+* Let's try an example. We will create a SSM parameter `dburl` to use as `DATABASE_URL` in backend container. For that follow these steps: 
+  1. Login to your AWS Console.
+  2. Go to `Services` --> `RDS`.
+  3. Click on `Create Database`.
+  4. Here select `Standard create`. Under engine options, select `mysql`. Then select `Free Tier` template.
+  5. Then under credentials setting, set a new password and confirm it.
+  6. Select instance type as `t3.micro` and allocate 10 GB storage. 
+  7. Create new security group `db-1-sg`. Give initial database name as `userdb`.
+  8. Keep rest of configurations as they are. And click on `Create Database`. 
+  9. Now to create parameter, go to `services` --> `AWS Systems Manager` --> `Parameter Store`.
+  10. Now click on `Create Parameter`.
+  11. Assign a name to parameter. Then select `standard` tier. Select `String` type. 
+  12. In `Value` field, write `mysql://<db-username>:<password>@<RDS-Endpoint>:3306/<db Name>`. And click on `Create Parameter`. 
+    > **Note**: Here replace `db-username`, `password` and other things with your values.
+  13. Now we have to create a role having permission to access RDS instance as well as System parameter. For that go to `Services` --> `IAM` --> `Roles`.
+  14. Click on `Create role`. Select `AWS service` as entity type and `EC2` as use case. Click on `Next`.
+  15. Here we have to attach policies to our role. Select `AmazonRDSReadOnlyAccess` and `AmazonSSMManagedInstanceCore` policies. Click on `Next`.
+  16. Now give a name to role like `EC2-RDS-SSM-Role`. And click on `Create Role`.
+  17. Finally we will launch our EC2 instance (ubuntu) with following userdata script: 
+  ```
+  #!/bin/bash
+  apt-get update
+  apt-get install -y docker.io
+
+  usermod -aG docker ubuntu
+
+  apt-get install -y awscli 
+  ```
+  18. Then login to your instance using `mobaxterm` and try to spin containers using following commands: 
+  ```
+    $ docker network create my-network
+  ```
+  ```
+    $ docker run --name backend --network my-network -e DATABASE_URL="$(aws ssm get-parameter --region "ap-south-1" --name "dburl" --query Parameter.Value --output text)" -d priyankainflectionzone/backend-app:1.0 
+  ```
+  ```
+    $ docker run -d --name app-container -p 3000:3000 --network my-network -e BACKEND_API_URL="http://backend:3456" priyankainflectionzone/frontend-app:2.0
+  ```
+
+  19. Now copy the public IP of EC2 instance, and paste it to browser with port no. 3000. as our frontend app is running on port 3000. You may see the index page of our application. 
+
+    <img src="./Images/ssm-1.png" width="600" height="250"/>
+         &nbsp;<br>
+
+
+### 5. Using Kubernetes: 
+* In kubernetes, you can set environment variables in Pod's container using the `env` field in the container spec.
+* For example:
+  ```
+    spec:
+      container:
+        name: app-container
+        image: app:1.0
+        env:
+         - name: VAR1
+           value: "value1"
+  ```
+
+* But this not the proper way to poulate environment variables having sensitive data. 
+* Kubernetes provides `ConfigMaps` and `Secrets` to manage application configuration data.
+* `ConfigMaps` are used to store non-sensitive data while `Secrets` are used to store sensitive data.
+* Both `ConfigMaps` and `Secrets` can be mounted as environment variables in a container.
+* Let's take an example. Suppose we need to spin a container with mysql image. So we will save its usename and password as `Secrets` and db-name as `ConfigMap`.
+* For that you need to start a minikube cluster on your system or you may use AWS EKS cluster too. In this example, I am using minikube cluster.
+* So go to terminal and run command `minikube start`. It will create a local minikube cluster. 
+* Now create a directory for storing our manifest and other config files.
+* Then save db username and password as secrets using following commands:
+```
+ $ kubectl create secret generic mysqluser --from-literal=MYSQL_USER=admin
+```
+```
+ $ kubectl create secret generic mysqlpassword --from-literal=MYSQL_PASSWORD=password
+```
+```
+ $ kubectl create secret generic mysqlrootpassword --from-literal=MYSQL_ROOT_PASSWORD=password
+```
+
+* Now let's save database name as ConfigMap.
+```
+ $ kubectl create configmap dbname --from-literal=MYSQL_DATABASE=userdb
+```
+* Next create a manifest file `main.yml` describing Pod's configurations as: 
+```
+ apiVersion: v1
+ kind: Pod
+ metadata:
+  name: envtest
+  namespace: default
+ spec:
+  containers:
+    - name: dbcontainer12345
+      image: mysql:8.0
+      ports:
+        - containerPort: 3306
+      env:
+        - name: MYSQL_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: dbname
+              key: MYSQL_DATABASE
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: mysqluser
+              key: MYSQL_USER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysqlpassword
+              key: MYSQL_PASSWORD
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysqlrootpassword
+              key: MYSQL_ROOT_PASSWORD
+```
+* Go to terminal and run command: `$ kubectl apply -f main.yml`. And you may see your Pod is created with mentioned container having all environment variables which you have set.
+
+* If you run command `$ kubectl describe pod <podname>`, you may see in the `Environment` field of container specs, all env variables are passed.
