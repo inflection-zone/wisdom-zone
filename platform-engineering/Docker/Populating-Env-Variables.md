@@ -167,7 +167,7 @@ networks:
 
   - Here is our console output:
 
-  <img src="./Images/env-dockerfile.png" width="600" height="250"/>
+  <img src="./Images/env-dockerfile.png" width="600" height="150"/>
          &nbsp;<br> 
 
 ### 4. Using `.env` file: 
