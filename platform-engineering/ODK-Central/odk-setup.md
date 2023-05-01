@@ -21,7 +21,7 @@
   <img src="./Images/key-pair.png" width="600" height="250"/>
      &nbsp;<br>
 
-7. We need to install `Docker`, `Docker Compose` and `git` in our instance. You may install all of the after launching the instance but in this tutorial, we will give following `Userdata` script to install them while launching the instance. 
+7. We need to install `Docker`, `Docker Compose` and `git` in our instance. You may install all of them after launching the instance but in this tutorial, we will give following `Userdata` script to install them while launching the instance. 
     ```
     #!/bin/bash
     apt-get update
@@ -50,21 +50,21 @@
 
 * You'll need to do this for two reasons: a memorable name (like google.com) will be easier to remember and access than a pile of numbers, and you cannot get a security certificate without one. It is not currently possible to host Central within a subdirectory on another domain (so, my-website.com/my-odk-server is not possible, but my-odk-server.com is allowed, as is my-odk-server.my-website.com).
 
-* If you already have a domain name (free or paid), you may configure that but if you don't you need to follow these steps to create one: 
+* If you already have a domain name, you may configure that but if you don't, you need to follow these steps to create one: 
     1. You can pay one of the many popular commercial domain registrars for a full domain name, like MyOdkCentralServer.com. Search for "domain registrar" to find one of these. These often cost as little as $3/year. 
     2. You can use a free DNS service: we recommend [FreeDNS](https://freedns.afraid.org/), which has run for a long time and has a good reputation. With it, you can get a free name, albeit with a fixed second half (like MyOdkCentralServer.dynet.com).
-    3. I've selected `mooo.com` as domain and `myserverodk` as subdomain. So the whole DNS will be myserverodk.mooo.com. Then assign public IP of EC2 instance to this DNS.
+    3. I've selected `mooo.com` as domain and `myserverodk` as subdomain. So the whole DNS will be `myserverodk.mooo.com.` Then assign public IP of EC2 instance to this DNS.
 
 ## Install ODK Central
-1. Login into instance using `Mobaxterm`. For this you will need to install it first (You may get it [here](https://mobaxterm.mobatek.net/download.html)). To login into server you need o follow these steps: 
+1. Login into instance using `Mobaxterm`. For this you will need to install `Mobaxterm` first (You may get it [here](https://mobaxterm.mobatek.net/download.html)). To login into server you need to follow these steps: 
     - Open `Mobaxterm`. Click on `Session`.
     - In the next window, click on `SSH`. 
-    - Then paste public IP of instance inthe field `Remote Host`. Specify user as `ubuntu`. 
+    - Then paste public IP of instance in the field `Remote Host`. Specify user as `ubuntu`. 
     - Then click on `Advanced SSH Settings`. Select `Use Private Key`. Browse for `key-pair` used at the time of instnace launch. Click on `Ok`.
 &nbsp;<br>
 
-2. You will be logged in into instance. First check whether `Docker` & `Docker Compose` is installed on server. Use command:
- `$ docker --version && docker compose version`. 
+2. You will be logged in into instance. First check whether `Docker` & `Docker Compose` is installed on server. Use command: 
+     `$ docker --version && docker compose version`. 
 &nbsp;<br>
 
 3. Next download the software. In the server window, type: 
