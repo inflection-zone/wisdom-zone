@@ -63,17 +63,13 @@
     - Then click on `Advanced SSH Settings`. Select `Use Private Key`. Browse for `key-pair` used at the time of instnace launch. Click on `Ok`.
 &nbsp;<br>
 
-2. You will be logged in into instance. First check whether `Docker` & `Docker Compose` is installed on server. Use command: 
-     `$ docker --version && docker compose version`. 
+2. You will be logged in into instance. First check whether `Docker` & `Docker Compose` is installed on server. Use command:<br /> `$ docker --version && docker compose version`. 
 &nbsp;<br>
 
-3. Next download the software. In the server window, type: 
-`$ git clone https://github.com/getodk/central` 
-and press Enter. It should think for some time and download many things.
+3. Next download the software. In the server window, type:<br /> `$ git clone https://github.com/getodk/central` <br /> and press Enter. It should think for some time and download many things.
 &nbsp;<br>
 
-4. Go into the new central folder:
-`$ cd central`
+4. Go into the new central folder:<br /> `$ cd central`
 &nbsp;<br>
 
 5. Get the latest client and server:
