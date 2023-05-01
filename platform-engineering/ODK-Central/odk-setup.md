@@ -18,6 +18,7 @@
 5. For security group settings, open ports for `SSH(22)`, `HTTP(80)` and `HTTPS(443)`.
 
 6. Then specify a `secret key-pair` for logging in to instance. If you already have a key, you may assign it to instancwe or you may create a new key-pair. 
+
     <img src="./Images/key-pair.png" width="600" height="250"/>
      &nbsp;<br>
 
@@ -67,32 +68,27 @@
     ```
     $ docker --version && docker compose version
     ``` 
-&nbsp;<br>
 
 3. Next download the software. In the server window, type:
     ```
     $ git clone https://github.com/getodk/central
     ``` 
-and press Enter. It should think for some time and download many things.
-&nbsp;<br>
+    and press Enter. It should think for some time and download many things.
 
 4. Go into the new central folder:
     ```
     $ cd central
     ```
-&nbsp;<br>
 
 5. Get the latest client and server:
     ```
     $ git submodule update -i
     ```
-&nbsp;<br>
 
 6. Update settings. First, copy the settings template file so you can edit it:
     ```
     $ cp .env.template .env
     ```
-&nbsp;<br>
 
 7. Launch the `vi` text editing application and specify required settings: 
     ```
@@ -103,10 +99,8 @@ and press Enter. It should think for some time and download many things.
 
     - Leave the rest of the settings alone. Press `esc` then `:wq!` to save the changes and quit.
 
-    <img src="./Images/env.png" width="600" height="250"/>
- &nbsp;<br>
-
-
+        <img src="./Images/env.png" width="600" height="250"/>
+ 
 8. Let the system know that you want the latest version of the database:
     ```
     $ touch ./files/allow-postgres14-upgrade
