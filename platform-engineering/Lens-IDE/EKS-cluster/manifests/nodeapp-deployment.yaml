@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: node-app
+  name: nodeapp-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-app
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: node-app
+    spec:
+      containers:
+        - image: priyankainflectionzone/backend-app:1.0
+          name: backend-container
+          env:
+            - name: DATABASE_URL
+              value: mysql://admin:password@rdsd475777.cvcmgo9c9own.ap-south-1.rds.amazonaws.com:3306/db
+          ports:
+            - containerPort: 3456
+      restartPolicy: Always
+status: {}
