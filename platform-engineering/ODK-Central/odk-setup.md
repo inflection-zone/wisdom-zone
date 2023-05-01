@@ -63,58 +63,75 @@
     - Then click on `Advanced SSH Settings`. Select `Use Private Key`. Browse for `key-pair` used at the time of instnace launch. Click on `Ok`.
 &nbsp;<br>
 
-2. You will be logged in into instance. First check whether `Docker` & `Docker Compose` is installed on server. Use command:<br /> 
-```
-  $ docker --version && docker compose version
-``` 
+2. You will be logged in into instance. First check whether `Docker` & `Docker Compose` is installed on server. Use command: 
+    ```
+    $ docker --version && docker compose version
+    ``` 
 &nbsp;<br>
 
-3. Next download the software. In the server window, type:<br /> `$ git clone https://github.com/getodk/central` <br /> and press Enter. It should think for some time and download many things.
+3. Next download the software. In the server window, type:
+    ```
+    $ git clone https://github.com/getodk/central
+    ``` 
+and press Enter. It should think for some time and download many things.
 &nbsp;<br>
 
-4. Go into the new central folder:<br /> `$ cd central`
+4. Go into the new central folder:
+    ```
+    $ cd central
+    ```
 &nbsp;<br>
 
 5. Get the latest client and server:
-```
-  $ git submodule update -i
-```
+    ```
+    $ git submodule update -i
+    ```
 &nbsp;<br>
 
 6. Update settings. First, copy the settings template file so you can edit it:
-`$ cp .env.template .env`
+    ```
+    $ cp .env.template .env
+    ```
 &nbsp;<br>
 
 7. Launch the `vi` text editing application and specify required settings: 
-`$ vi .env` 
-&nbsp;<br>
-    - Change the `DOMAIN` line so that after the `=` is the domain name you registered above. As an example: `DOMAIN=myserverodk.mooo.com.` Do not include `http://` or `https://` in the domain.
-
+    ```
+    $ vi .env
+    ``` 
+   - Change the `DOMAIN` line so that after the `=` is the domain name you registered above. As an example: `DOMAIN=myserverodk.mooo.com.` Do not include `http://` or `https://` in the domain.
     - Change the `SYSADMIN_EMAIL` line so that after the `=` is your own email address. The Let's Encrypt service will use this address only to notify you if something is wrong with your security certificate. 
 
     - Leave the rest of the settings alone. Press `esc` then `:wq!` to save the changes and quit.
 
     <img src="./Images/env.png" width="600" height="250"/>
-     &nbsp;<br>
+ &nbsp;<br>
 
 
 8. Let the system know that you want the latest version of the database:
-`$ touch ./files/allow-postgres14-upgrade`
-This is mostly useful for upgrades but is also currently necessary for fresh installs.
+    ```
+    $ touch ./files/allow-postgres14-upgrade
+    ```
+    This is mostly useful for upgrades but is also currently necessary for fresh installs.
 &nbsp;<br>
 
 9. Bundle everything together into a server. This will take a long time and generate quite a lot of text output. 
-`$ docker compose build`
-When it finishes, you should see some "Successfully built" type text and get your input prompt back.
+    ```
+    $ docker compose build
+    ```
+    When it finishes, you should see some "Successfully built" type text and get your input prompt back.
 &nbsp;<br> 
 
 10. Start the server software. The first time you start it, it will take a while to set itself up. 
-`$ docker compose up -d`
+    ```
+    $ docker compose up -d
+    ```
 &nbsp;<br>
 
 11. See whether ODK has finished loading.
-`$ docker compose ps`
-Under the `Status` column, for the `central-nginx-1` row, you will want to see text that reads Up or Up (healthy). If you see Up (health: starting), give it a few minutes. If you see some other text, something has gone wrong. 
+    ```
+    $ docker compose ps
+    ```
+    Under the `Status` column, for the `central-nginx-1` row, you will want to see text that reads Up or Up (healthy). If you see Up (health: starting), give it a few minutes. If you see some other text, something has gone wrong. 
 &nbsp;<br>
 
 12. Visit your domain name in a web browser. If it's not accessible yet, you should continue waiting. Once it is accessible, check that you get the Central website. 
@@ -122,17 +139,22 @@ Under the `Status` column, for the `central-nginx-1` row, you will want to see t
 ## Logging Into Central
 Now, you have to create an Administrator account so that you can log into Central. To do this: 
 1. Ensure that you are in the central folder on your server. If you have not closed your console session from earlier, you should be fine. If you have just logged back into it: 
-`$ cd central`
-&nbsp;<br>
+    ```
+    $ cd central
+    ```
+
 
 2. Create a new account. Make sure to substitute the email address that you want to use for this account.
-`$ docker compose exec service odk-cmd --email <YOUREMAIL@ADDRESSHERE>.com user-create` 
-Press Enter, and you will be asked for a password for this new account.
+    ```
+    $ docker compose exec service odk-cmd --email <YOUREMAIL@ADDRESSHERE>.com user-create
+    ``` 
+    Press Enter, and you will be asked for a password for this new account.
 &nbsp;<br>
-
 3. Make the new account an administrator. 
-`$ docker compose exec service odk-cmd --email <YOUREMAIL@ADDRESSHERE.com> user-promote` 
-<img src="./Images/admin-login.png" width="600" height="250"/>
+    ```
+    $ docker compose exec service odk-cmd --email <YOUREMAIL@ADDRESSHERE.com> user-promote
+    ``` 
+   <img src="./Images/admin-login.png" width="600" height="250"/>
 
 4. Log into the Central website. Go to your domain name and enter in your new credentials. Once you have one administrator account, you do not have to go through this process again for future accounts: you can log into the website with your new account, and directly create new users that way.
 
