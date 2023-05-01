@@ -6,11 +6,11 @@
 ## Steps To Launch An EC2 Instance
 1. Login to your AWS account.
 2. Search in services for `EC2`. Select `EC2` Service. Select your desired region (in this case `ap-south-1` i.e. `Mumbai`).
-<img src="../AWS/EC2-1.png" width="600" height="250"/>
+    <img src="../AWS/EC2-1.png" width="600" height="250"/>
      &nbsp;<br>
 
 3. On EC2 Dashboard, click on `Instances`. Select `Launch Instances`.
-<img src="../AWS/EC2-2.png" width="600" height="250"/>
+    <img src="../AWS/EC2-2.png" width="600" height="250"/>
      &nbsp;<br>
 
 4. Then you need to give specifications for your instance like its name, AMI, Instance type, storage etc. In our case, we've selected `Ubuntu 22.04 LTS` AMI and `t3.medium` instance type. We have associated 20GB of storage to it. 
@@ -18,7 +18,7 @@
 5. For security group settings, open ports for `SSH(22)`, `HTTP(80)` and `HTTPS(443)`.
 
 6. Then specify a `secret key-pair` for logging in to instance. If you already have a key, you may assign it to instancwe or you may create a new key-pair. 
-  <img src="./Images/key-pair.png" width="600" height="250"/>
+    <img src="./Images/key-pair.png" width="600" height="250"/>
      &nbsp;<br>
 
 7. We need to install `Docker`, `Docker Compose` and `git` in our instance. You may install all of them after launching the instance but in this tutorial, we will give following `Userdata` script to install them while launching the instance. 
