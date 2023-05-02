@@ -20,7 +20,7 @@ spec:
           name: backend-container
           env:
             - name: DATABASE_URL
-              value: mysql://admin:password@rdsd475777.cvcmgo9c9own.ap-south-1.rds.amazonaws.com:3306/db
+              value: mysql://<RDS-Username>:<RDS-password>@<RDS-endpoint>:3306/db
           ports:
             - containerPort: 3456
       restartPolicy: Always
