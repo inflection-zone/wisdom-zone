@@ -10,7 +10,9 @@
 
 ### [NGINX Related Documents](./NGINX/) 
 
-### [Github-Actions Related Document](./Github-Actions/)
+### [Github-Actions Related Document](./Github-Actions/) 
+
+### [ODK Server Setup Document](./ODK-Central/odk-setup.md)
 
 
 

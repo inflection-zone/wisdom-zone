@@ -1,7 +1,7 @@
 # Setup ODK Server on AWS
 ## Prerequisites
 * An AWS account
-* Basisc of Docker and docker commands.
+* Basics of Docker and docker commands.
 
 ## Steps To Launch An EC2 Instance
 1. Login to your AWS account.
