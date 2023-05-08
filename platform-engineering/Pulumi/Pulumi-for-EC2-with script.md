@@ -162,7 +162,7 @@
 
         `$ cat rsa.pub | pulumi config set publickey --`
 
-        `$ car rsa | pulumi config set privatekey --secret --`
+        `$ cat rsa | pulumi config set privatekey --secret --`
 
      &nbsp;<br> 
 
