@@ -129,6 +129,7 @@
 &nbsp;<br>
 
 12. Visit your domain name in a web browser. If it's not accessible yet, you should continue waiting. Once it is accessible, check that you get the Central website. 
+
     <img src="./Images/output.png" width="600" height="250"/>
 
 ## Logging Into Central
