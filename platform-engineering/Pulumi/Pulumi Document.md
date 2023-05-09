@@ -60,10 +60,10 @@
 
 # Sample Example-1:   
  * Check whether Pulumi is installed on system. 
-```
-    > pulumi version
-    v3.51.1`
-``` 
+  ```
+      > pulumi version
+  ```
+* If it is properly installed, it will give you version of pulumi as `v3.51.1`.
 * Now that we have set up our environment, let’s create our first Pulumi program with following steps:
  1. Open command prompt & create new directory using `$ mkdir pulumidemo`. Next go into that directory `$ cd pulumidemo`.
  2. Create new Pulumi project using command `$ pulumi new aws-typescript`.
