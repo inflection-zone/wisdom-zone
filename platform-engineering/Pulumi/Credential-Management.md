@@ -1,12 +1,15 @@
-# Pulumi Code to Use AWS Secrets Manager
+# Credential Management through Pulumi
 
-## Overview of AWS Secrets Manager
+
+## AWS Secret Manager
+
+### Overview of AWS Secrets Manager
 * AWS Secrets Manager helps you manage, retrieve, and rotate database credentials, application credentials, OAuth tokens, API keys, and other secrets throughout their lifecycles. Many AWS services that use secrets store them in Secrets Manager. 
 * Secrets Manager helps you improve your security posture, because you no longer need hard-coded credentials in application source code. 
 * Storing the credentials in Secrets Manager helps avoid possible compromise by anyone who can inspect your application or the components.
 * You can replace hard-coded credentials with a runtime call to the Secrets Manager service to retrieve credentials dynamically when you need them. 
 
-## Create and retrieve Secret using Pulumi code
+### Create and retrieve Secret using Pulumi code
 * In this tutorial, we will write a simple pulumi code to understand how to create a secret in AWS Secrets Manager and how to retrieve it. 
 * To create new pulumi project, you need to follow steps given in `Sample-Example-1` [here](./Pulumi%20Document.md).
 * Let's create Pulumi code with following steps: 
@@ -270,4 +273,52 @@
     ```
         # env
     ```
-Here you may see the environment variable we passed while running container to which retrieved value of secret is assigned.
+Here you may see the environment variable we passed while running container to which retrieved value of secret is assigned. 
+
+
+## Hashicorp Vault 
+
+### Overview of Hashicorp Vault
+* HashiCorp Vault is an identity-based secrets and encryption management system. 
+* It is designed to help organizations manage access to secrets and transmit them safely within an organization. 
+* `Secrets` are defined as any form of sensitive credentials that need to be tightly controlled and monitored and can be used to unlock sensitive information. Secrets could be in the form of passwords, API keys, SSH keys, RSA tokens, or OTP.
+* Vault validates and authorizes clients (users, machines, apps) before providing them access to secrets or stored sensitive data. 
+<img src="./Images/vault1.png" width="600" />
+     &nbsp;<br>
+
+### Uses of Vault: 
+1. Secret management:
+    - Static Secrets
+    - Dynamic Secrets
+2. Identity-based access 
+3. Data encryption 
+4. Key Management
+> **Note:** For information about vault and its use cases, please refer official documentation [here](https://developer.hashicorp.com/vault/docs).
+
+### Installation Steps: 
+* In this tutorial, we will install Hashicorp Vault on linux (Ubuntu). So the steps will be for linux OS only. If you are using different platform, please refer this [document](https://developer.hashicorp.com/vault/tutorials/getting-started/getting-started-install?in=vault%2Fgetting-started) 
+
+* Steps:
+    1. Add GPG for the package signing key.
+    ```
+    sudo apt update && sudo apt install gpg
+    ```
+    2. Add the HashiCorp GPG key.
+    ```
+    wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+    ```
+    3. Verify the key's fingerprint. 
+    ```
+    gpg --no-default-keyring --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg --fingerprint 
+    ```
+    4. Add the official HashiCorp Linux repository.
+    ```
+    echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list 
+    ```
+    5. Update and install.
+    ```
+    sudo apt update && sudo apt install vault 
+    ```
+
+
+
