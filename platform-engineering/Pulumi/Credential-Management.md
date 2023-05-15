@@ -319,6 +319,168 @@ Here you may see the environment variable we passed while running container to w
     ```
     sudo apt update && sudo apt install vault 
     ```
+### Working with Vault
+* Now Vault is installed, so we will start server in development mode. For that run following command:
+    ```
+    vault server -dev
+    ```
+    We will get output as shown in below image. It will give you `VAULT_ADDR`, `Unseal Key` and `Root Token` for server.
+    <img src="./Images/vault2.png" width="600" />
+     &nbsp;<br>
+* Now we need to set following environment variables:
+    1. Vault Address:
+    ```
+    export VAULT_ADDR='http://127.0.0.1:8200'
+    ```
+    2. Vault Token:
+    ```
+    export VAULT_TOKEN="hvs.G1UmRzzOo6SC02Z0xxxxxxxx"
+    ```
+* Now we will see the status of server using following command:
+    ```
+    vault status
+    ```
+    It will give us details about server as:
+    <img src="./Images/vault3.png" width="600" />
+     &nbsp;<br>
+
+* To list all vailable paths in secret engine, run following command:
+    ```
+    vault secrets list
+    ```
+    It will output all the paths availble by default in vault as
+    <img src="./Images/vault4.png" width="600" />
+     &nbsp;<br> 
+
+> **Note:** Secrets engines are components which store, generate, or encrypt data. Secrets engines are enabled at a `path` in Vault. When a request comes to Vault, the router automatically routes anything with the route prefix to the secrets engine. To the user, secrets engines behave similar to a virtual filesystem, supporting operations like read, write, and delete. To know more about `Secrets Engine`, please refer [documentation](https://developer.hashicorp.com/vault/docs/secrets) 
+
+* We can enable our own path in secret engine. To do so run command:
+    ```
+    vault secrets enable -path=YOUR_PATH_NAME_HERE kv
+    ```
+    In this command, `kv` is type of secret engine. It is abbreviation
+of `key-value`. Please replace `YOUR_PATH_NAME_HERE` with the name of your path. It will give an message like `Success! Enabled the kv secrets engine at: dbsecrets/`. 
+    To see whether the new path is added to the list, run command:
+    ```
+    vault secrets list
+    ```
+    You may see following output:
+    <img src="./Images/vault5.png" width="600" />
+     &nbsp;<br>
+
+* Now we will store our secrets in secrets engine using our own path as:
+    ```
+    vault kv put dbsecrets/data username=dbuser
+    ```
+    You will see the message as `Success! Data written to: dbsecrets/data` 
+
+* To read our secret please run following command:
+    ```
+    vault kv get dbsecrets/data 
+    ```
+    You may see all the secrets stored at path `dbsecrets/data`. 
+
+* If you want to see the secret data in jason format, modify above command as:
+    ```
+    vault kv get -format=json dbsecrets/data
+    ```
+    You will get information about secrets in json format as:
+    ```
+    {
+    "request_id": "5986ae41-a9e6-d2c3-2a81-bd45f4b17efd",
+    "lease_id": "",
+    "lease_duration": 2764800,
+    "renewable": false,
+    "data": {
+        "username": "dbuser"
+    },
+    "warnings": null
+    }
+    ``` 
+* To delete secrets from given path, you need to run command:
+    ```
+    vault kv delete dbsecrets/data 
+    ```
+    You will get output message like: `Success! Data deleted (if it existed) at: dbsecrets/data` 
+    Now if we run read command again on the same path, you may see the message like: `No value found at dbsecrets/data` 
+    <img src="./Images/vault5.png" width="600" />
+     &nbsp;<br> 
+
+### Access Vault through Pulumi
+* First we need to login to server with our `Root Token`. This is token auth method. There are several auth methods supported by vault. To know more about auth, please refer [document](https://developer.hashicorp.com/vault/docs/concepts/auth).
+
+* To login using root token, run following command: 
+    ```
+    vault login token:YOUR_ROOT_TOKEN
+    ```
+    If you forgot to copy token at the time of server start, you may generate new token using command:
+    ```
+    vault token create
+    ```
+    Then copy this token and paste in above command. You will be logged into vault-server. 
+    To revoke unused root-tokens, run command:
+    ```
+    vault token revoke YOUR_UNUSED_TOKEN
+    ```
+    Please don't forget to replace `YOUR_ROOT_TOKEN` and `YOUR_UNUSED_TOKEN` with your appropriate token values. 
+
+* To use one of paths of vault, we need to add a policy defining permissions to that particular path. So run command:
+    ```
+    vault policy write my-policy -  EOF
+        path "secret/*" {
+        capabilities = ["create","read", "update", "delete"]
+        }
+        EOF
+    ```
+    Here, we have enabled all the operations on path `secret/*`.
+
+* Now we need to configure `Pulumi` with the vault-server credentials. Before that, we should setup new pulumi project using steps given in this [document](./Pulumi%20Document.md). Then run following commands in terminal:
+    ```
+    pulumi config set vaut:address VAULT_SERVER_ADDRESS
+    ```
+    ```
+    pulumi config set vaut:token YOUR_TOKEN_HERE
+    ```
+    Here, we will replace `VAULT_SERVER_ADDRESS` with our server address i.e. `http://127.0.0.1:8200` and `YOUR_TOKEN_HERE` with our root token we just used for login to server.
+
+* To use pulumi for storing & retrieving secrets from vault, we will use `@pulumi/vault` package. So we need to install it first using command:
+    ```
+    npm i @pulumi/vault
+    ```
+
+* Now replace code in `index.ts` file with our desired code. Following are code examples to store secrets to vault and retrieve them using pulumi-typescript:
+    ```
+    import * as pulumi from "@pulumi/pulumi";
+    import * as aws from "@pulumi/aws";
+    import * as vault from "@pulumi/vault";
+
+    const dbSecret = new vault.generic.Secret("my-db-secret", {
+         path: "secret/dbsecrets",
+         dataJson: JSON.stringify({
+             username: "dbuser",
+             password: "password",
+         }),
+    });
+
+    ```
+    Using above code we can store database secrets like username and password to the vault at path `secret/dbsecrets`. Run command `pulumi up` to execute the code. You may check whether secrets are stored properly at given path by using command:
+    ```
+    vault kv get secret/dbsecrets
+    ```  
+* Now to retrieve stored secrets, use following code:
+    ```
+    const dbsecrets = vault.generic.getSecret({
+        path: "secret/dbsecrets",
+    });
+
+    const dbusername = dbsecrets.then(secrets => secrets.data["username"]);
+    const dbpassword = dbsecrets.then(secrets => secrets.data["password"]);
+
+    ```
+    Here we have stored retrieved values of username and password in constants `dbusername` and `dbpassword` so that we can use them while creating database instance like AWS RDS. 
+
+
+
 
 
 
