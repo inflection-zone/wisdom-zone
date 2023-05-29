@@ -36,7 +36,7 @@
         If you get version number of Terraform, that means you have installed it successfully.
 
 ## Setup Infrastructure
-### Prerequisites: 
+### Prerequisites 
 To create AWS infrastructure using terraform, one should have
 1. An AWS account
 2. AWS CLI installed and configured with IAM user credentials
@@ -317,7 +317,7 @@ To create AWS infrastructure using terraform, one should have
     ```
     $ terraform apply
     ```
-    Before it applies any changes, Terraform prints out the execution plan which describes the actions Terraform will take in order to change your infrastructure to match the configuration. Terraform will now pause and wait for your approval before proceeding. So type yes at the confirmation prompt to proceed. Executing the plan will take a few minutes since Terraform waits for the EC2 instance to become available.
+    Before it applies any changes, Terraform prints out the execution plan which describes the actions Terraform will take in order to change your infrastructure to match the configuration. Terraform will now pause and wait for your approval before proceeding. So type `yes` at the confirmation prompt to proceed. Executing the plan will take a few minutes since Terraform waits for the EC2 instance to become available.
 16. We have now created infrastructure using Terraform. Visit the `EC2 console` and find new EC2 instance. Take its public IP and paste it in the browser. You may see the index page of frontend application.
 
 
