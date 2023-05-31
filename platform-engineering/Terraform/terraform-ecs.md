@@ -12,26 +12,7 @@ To create AWS infrastructure using terraform, one should have
 ## Define Infrastructure
 1. Create a folder at your desired location. Create a new file inside that folder and name it as `main.tf`.
 2. Open this folder with `VS Code` or any other code editor. Open `main.tf`. Start defining resources.
-3. First define Terraform configurations as :
-    ```
-    terraform {
-        required_providers {
-            aws = {
-            source  = "hashicorp/aws"
-            version = "~> 4.16"
-            }
-        }
-
-        required_version = ">= 1.2.0"
-    }
-    ``` 
-4. Next define provider using following lines of code:
-    ```
-    provider "aws" {
-        region = "ap-south-1"
-    }
-    ```
-5. In this tutorial, we will create following AWS resources: 
+3. In this tutorial, we will create following AWS resources: 
     1. VPC & subnets
     2. Internet Gateway, Route Tables and their associations
     3. Service-discovery namespace
@@ -45,7 +26,7 @@ To create AWS infrastructure using terraform, one should have
     11. Task definition for frontend service, service-discovery service resource for frontend and frontend service 
     12. WAF Web-ACL and Web-ACL association with load balancer 
 
-6. Let's start with code. First define terraform configurations as:
+4. Let's start with code. First define terraform configurations as:
     ```
     terraform {
         required_providers {
@@ -58,13 +39,13 @@ To create AWS infrastructure using terraform, one should have
         required_version = ">= 1.2.0"
         }
     ```
-7. Now define provider. In this case it is `aws`.
+5. Now define provider. In this case it is `aws`.
     ```
     provider "aws" {
         region = "ap-south-1"
     }
     ```
-8. Now start defining infrastructure. First write code for VPC and its subnets:
+6. Now start defining infrastructure. First write code for VPC and its subnets:
     ```
     resource "aws_vpc" "deft-source-vpc" {
         cidr_block       = "10.0.0.0/16"
@@ -90,13 +71,14 @@ To create AWS infrastructure using terraform, one should have
         vpc_id            = aws_vpc.deft-source-vpc.id
         cidr_block        = "10.0.2.0/24"
         availability_zone = "ap-south-1b"
+        map_public_ip_on_launch = true
 
         tags = {
             Name = "dev-private-subnet"
         }
     }
     ``` 
-9. Next to create internet gateway, route tables and their association with particular subnets, write code as: 
+7. Next to create internet gateway, route tables and their association with particular subnets, write code as: 
     ```
     resource "aws_internet_gateway" "deft-source-igw" {
         vpc_id = aws_vpc.deft-source-vpc.id
@@ -142,14 +124,14 @@ To create AWS infrastructure using terraform, one should have
     ```
     Here, we have created two route tables i.e. public-rt & private-rt for two subnets and an internat gateway i.e. `dev-igw`.
 
-10. Next, create http-namespace for service discovery as:
+8. Next, create http-namespace for service discovery as:
     ```
     resource "aws_service_discovery_http_namespace" "stagging-namespace" {
         name        = "stagging-namespace.local"
         description = "stagging-namespace"
     }
     ```
-11. Now we will define cloudwatch log-group for ECS cluster:
+9. Now we will define cloudwatch log-group for ECS cluster:
     ```
     resource "aws_cloudwatch_log_group" "ecs-cluster-logs" {
         name = "ecs-cluster-logs"
@@ -158,7 +140,7 @@ To create AWS infrastructure using terraform, one should have
         }
     }
     ``` 
-12. Next we need to create ECS Cluster. We will name it as `Demo-Cluster`
+10. Next we need to create ECS Cluster. We will name it as `Demo-Cluster`
     ```
     resource "aws_ecs_cluster" "demo" {
         name = "demo-cluster"
@@ -180,7 +162,7 @@ To create AWS infrastructure using terraform, one should have
         }
     }
     ```
-13. Now we will define load balancer and its supporting resources like target group, listener, security group for load balancer.
+11. Now we will define load balancer and its supporting resources like target group, listener, security group for load balancer.
     ```
     resource "aws_security_group" "alb-security-group" {
         name        = "alb-sg"
@@ -245,7 +227,7 @@ To create AWS infrastructure using terraform, one should have
         }
     } 
     ```
-14. Next, we will define security groups for services and RDS instance as:
+12. Next, we will define security groups for services and RDS instance as:
     ```
     resource "aws_security_group" "frontend-security-group" {
         name        = "frontend-sg"
@@ -318,7 +300,7 @@ To create AWS infrastructure using terraform, one should have
         }
     }
     ```
-15. Create Subnet-group for RDS instance and RDS instance using following code:
+13. Create Subnet-group for RDS instance and RDS instance using following code:
     ```
     resource "aws_db_subnet_group" "db-subnet-group" {
         name       = "db-subnet-group"
@@ -342,7 +324,7 @@ To create AWS infrastructure using terraform, one should have
         skip_final_snapshot    = true
     }
     ```
-16. Define `task execution role` and attach appropriate policies to it. Then we will assign this role to task definitions.
+14. Define `task execution role` and attach appropriate policies to it. Then we will assign this role to task definitions.
     ```
     resource "aws_iam_role" "task-execution-role" {
         name = "task-execution-role"
@@ -409,7 +391,7 @@ To create AWS infrastructure using terraform, one should have
     }
     ```
 
-17. Let's define backend task definition and service as:
+15. Let's define backend task definition and service as:
     ```
     resource "aws_ecs_task_definition" "backend-service-taskdef" {
         family                   = "backend"
@@ -476,7 +458,7 @@ To create AWS infrastructure using terraform, one should have
     }
     ```
 
-18. Next define frontend task definition and service as: 
+16. Next define frontend task definition and service as: 
     ```
     resource "aws_ecs_task_definition" "frontend-service-taskdef" {
         family                   = "frontend"
@@ -540,7 +522,7 @@ To create AWS infrastructure using terraform, one should have
         depends_on = [aws_ecs_service.backend-service, aws_lb.ecs-lb]
     }
     ```
-19. In the next step we will define AWS WAF configurations. Let's first create Web-ACL and then associate with load balancer resource. To do this use following code:
+17. In the next step we will define AWS WAF configurations. Let's first create Web-ACL and then associate with load balancer resource. To do this use following code:
     ```
     resource "aws_wafv2_web_acl" "ECS-Web-ACL" {
         name  = "ECS-Web-ACL"
@@ -580,21 +562,21 @@ To create AWS infrastructure using terraform, one should have
     }
     ```
 
-20. Infrastructure definitions are completed. Now we need to deploy these resources on AWS. To do this, first open terminal and run command:
+18. Infrastructure definitions are completed. Now we need to deploy these resources on AWS. To do this, first open terminal and run command:
     ```
     $ terraform init
     ```
      This will initialize a terraform configuration directory. Initializing a configuration directory downloads and installs the providers defined in the configuration.
     
-21. Then to validate our configuration, run command:
+19. Then to validate our configuration, run command:
     ```
     $ terraform validate
     ```
     If the configuration is valid it will return success message as ` Success! The configuration is valid.`
 
-22. Once we get success message from validation command, we are all set to apply these configurations and deploy the resources on cloud. To do this, run command:
+20. Once we get success message from validation command, we are all set to apply these configurations and deploy the resources on cloud. To do this, run command:
     ```
     $ terraform apply
     ```
     Before applying any changes, Terraform prints out the execution plan which describes the actions Terraform will take in order to change your infrastructure to match the configuration. Terraform will now pause and wait for your approval. So type `yes` at the confirmation prompt to proceed.
-23. We are now having our resources on cloud. To verify deployment, login to AWS Account. Go to `EC2 dashboard`. Select `Load Balancers`. You may see a load balancer is created by terraform. Copy its `DNS Name` and paste in the browser. You may see the index page of your application. Now you may test your whole application here. 
+21. We are now having our resources on cloud. To verify deployment, login to AWS Account. Go to `EC2 dashboard`. Select `Load Balancers`. You may see a load balancer is created by terraform. Copy its `DNS Name` and paste in the browser. You may see the index page of your application. Now you may test your whole application here. 
