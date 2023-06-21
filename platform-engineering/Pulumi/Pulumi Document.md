@@ -66,7 +66,7 @@
   ```
 * If it is properly installed, it will give you version of pulumi as `v3.51.1`.
 * Now that we have set up our environment, let’s create our first Pulumi program with following steps:
- 1. Open command prompt. Create new directory 7 step into that using following command:
+ 1. Open command prompt. Create new directory & step into that using following command:
     ```
     $ mkdir pulumidemo && cd pulumidemo
     ```
