@@ -58,15 +58,21 @@
   * **State and Backends**: Pulumi stores metadata about your infrastructure so that it can manage your cloud resources. This metadata is called state. Each stack has its own state, and state is how Pulumi knows when and how to create, read, delete, or update cloud resources.
 
 
-# Sample Example-1:   
- * Check whether Pulumi is installed on system. 
+# Setup Pulumi:   
+* Check whether Pulumi is installed on system. 
   ```
       > pulumi version
   ```
 * If it is properly installed, it will give you version of pulumi as `v3.51.1`.
 * Now that we have set up our environment, let’s create our first Pulumi program with following steps:
- 1. Open command prompt & create new directory using `$ mkdir pulumidemo`. Next go into that directory `$ cd pulumidemo`.
- 2. Create new Pulumi project using command `$ pulumi new aws-typescript`.
+ 1. Open command prompt. Create new directory 7 step into that using following command: 
+    ```
+    $ mkdir pulumidemo && cd pulumidemo
+    ```
+ 2. Create new Pulumi project using command 
+    ```
+    $ pulumi new aws-typescript
+    ````
    > **Note**: If this is your first time running pulumi new or other pulumi commands, you may be prompted to log in to the Pulumi Service. Hitting Enter at the prompt opens a browser for you to sign in or sign up.
  3. After logging in, the CLI will proceed with walking you through creating a new project. 
     - First, you will be asked for a project name and project description. Hit ENTER to accept the default values or specify new values. 
@@ -135,7 +141,8 @@ Duration: 14s
   To destroy resources, run the following:
   `pulumi destroy`
   You’ll be prompted to make sure you really want to delete these resources. This can take a minute or two; Pulumi waits until all resources are shut down and deleted before it considers the destroy operation to be complete. 
-# Example 2 : Schoool-app
+
+# AWS Infra for Schoool-app
 * In this, I have written simple application which will access a mysql database. We have to deploy it over Amazon ECS cluster using Pulumi-typescript. One may find this apllication code here: https://github.com/Priyanka-Inflectionzone/school-app.git 
 
 * Steps to deploy this appliction over aws using pulumi, we have to follow these steps: 
