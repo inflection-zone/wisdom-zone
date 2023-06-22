@@ -80,7 +80,8 @@
     - Next, you will be asked for a stack name. Hit ENTER to accept the default value of dev.
     - Finally, you will be prompted for some configuration values for the stack. For AWS projects, you will be prompted for the AWS region. You can accept the default value or choose another value like ap-south-1
     - After some dependency installations from `npm`, the project and stack will be ready.
-  4. You may review the generated files :
+  4. You may review the generated files using `$ ls` command in your terminal. You may also view these files using code editor like `VS Code`. To do this run command `$ code .` from your terminal. With this command your current directory gets open in `VS Code` and you can see following generated files there:
+
    - Pulumi.yaml: This file defines the project
    - Pulumi.dev.yaml: This file contains configuration values for the stack you just initialized.
    - index.ts: It is the Pulumi program that defines your stack resources. It looks like:
@@ -97,8 +98,11 @@
 
   ```
   This Pulumi program creates a new S3 bucket and exports the name of the bucket.
-  5. Deploy the stack: Let’s go ahead and deploy your stack using
-  `pulumi up`
+
+  5. Deploy the stack: Let’s go ahead and deploy your stack using command:
+    ```
+    $ pulumi up
+    ```
   This command evaluates your program and determines the resource updates to make. First, a preview is shown that outlines the changes that will be made when you run the update:
   ```
   Previewing update (dev):
