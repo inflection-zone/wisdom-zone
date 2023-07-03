@@ -48,8 +48,8 @@
 ## Push Image to AWS ECR
 1. Login to your AWS console. Search for `ECR` in searchbox next to services tab. Select ECR. You may see ECR console page.
 2. Select `Create Repository`. Fill the details as shown in following image:
-&nbsp;<br>
-   <img src="../Pulumi/Images/ecr-1.png" width="600" />
+
+    <img src="../Pulumi/Images/ecr-1.png" width="600" />
 
     Here, give your own repository name instead of "school-app". Enable `Scan on push` and keep othe fields as they are.
 &nbsp;<br>
