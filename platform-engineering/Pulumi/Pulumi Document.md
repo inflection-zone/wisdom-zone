@@ -148,10 +148,11 @@ Duration: 14s
   You’ll be prompted to make sure you really want to delete these resources. This can take a minute or two; Pulumi waits until all resources are shut down and deleted before it considers the destroy operation to be complete.
 
 # AWS Infra for Schoool-app
-* In this, I have written simple application which will access a mysql database. We have to deploy it over Amazon ECS cluster using Pulumi-typescript. One may find this apllication code here: https://github.com/Priyanka-Inflectionzone/school-app.git
+
+* In this, I have written simple application which will access a mysql database. We have to deploy it over Amazon ECS cluster using Pulumi-typescript. One may find this application code here: https://github.com/Priyanka-Inflectionzone/school-app.git
 
 * Steps to deploy this appliction over aws using pulumi, we have to follow these steps:
- 1. Create am AWS IAM user account with administrative access policy. Configure your AWS CLI for this account.
+ 1. Create an AWS IAM user account with administrative access policy. Configure your AWS CLI for this account.
  2. Create an ECR repository called "school-app". For this follow these steps:
   i. Login into your AWS management console. Go to services & search for ECR.
   ii. In ECR, click on "Create repository". Fill the details as shown in following image.
