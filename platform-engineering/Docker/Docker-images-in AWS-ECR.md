@@ -64,3 +64,4 @@
 &nbsp;<br>
 
 5. Out of given commands, we have already done building of docker image i.e. step no.2. So you can skip it. Follow all other steps to push your dockerfile on ECR.
+6. To use this docker image anywhere in your porogram, step into ECR repository, you may see your image here. Copy the image uri and use in your program or anywhere you need to set docker image name.
