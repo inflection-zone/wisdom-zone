@@ -136,6 +136,10 @@ spec:
 
 ### Services
 - An abstraction that defines a logical set of Pods and a policy by which to access them.
+- Advantages:
+  - Provide load-balancing
+  - Service discovery using labels and selectors
+  - Expose application to external world
 - Types: ClusterIP, NodePort, LoadBalancer.
 
 #### Example: Service YAML (NodePort)
