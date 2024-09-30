@@ -8,7 +8,7 @@ This guide walks through the entire process of deploying services to Azure Kuber
 4. [Create an AKS Cluster](#create-an-aks-cluster)
 5. [Kubernetes Manifests for Services](#kubernetes-manifests-for-services)
 6. [Deploy Services to AKS](#deploy-services-to-aks)
-7. [Monitoring and Scaling](#monitoring-and-scaling)
+7. [Monitoring](#monitoring)
 8. [Cleanup Resources](#cleanup-resources)
 
 ---
@@ -40,23 +40,18 @@ We will create Docker images for our services. Suppose you have a service folder
 Below is an example of a Dockerfile for a Node.js-based service:
 
 ```dockerfile
-# Use an official Node.js runtime as a parent image
-FROM node:16
 
-# Set the working directory
+FROM node:18
+
 WORKDIR /app
 
-# Copy package.json and install dependencies
 COPY package*.json ./
 RUN npm install
 
-# Copy the rest of the app's code
 COPY . .
 
-# Expose the application port
 EXPOSE 3000
 
-# Run the app
 CMD ["node", "src/index.js"]
 ```
 
