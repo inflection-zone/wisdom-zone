@@ -100,7 +100,7 @@ docker push myregistry.azurecr.io/service1:latest
 docker push myregistry.azurecr.io/service2:latest
 ```
 
-<img src="./Images/acr.png" width="600"/>
+<img src="./images/acr.png" width="600"/>
 
 ---
 
@@ -140,7 +140,7 @@ While creating the AKS cluster, you can enable **Azure Monitor for containers** 
     3. In the **Overview** section, click on **Connect**.
     4. Follow the instructions to download the **kubectl** configuration. Use Azure Cloud Shell (or a local terminal with Azure CLI installed) to connect to the cluster.
 
-<img src="./Images/cluster.png" width="600"/>
+<img src="./images/cluster.png" width="600"/>
 
 To connect to created AKS cluster from your local machine, you may refer connect instructions given on Azure Portal as shown in image below. Example command is as follows-
 
@@ -148,7 +148,7 @@ To connect to created AKS cluster from your local machine, you may refer connect
 az aks get-credentials --resource-group <your-resource-group> --name <your-cluster-name>
 ```
 
-<img src="./Images/connect-to-cluster.png" width="600"/>
+<img src="./images/connect-to-cluster.png" width="600"/>
 
 ---
 
@@ -236,31 +236,31 @@ You should see the pods for your services running and an external IP for the ser
 
 - Open Lens. Select AKS cluster from list of clusters there.
 
-<img src="./Images/lense_clusters.png" width="600"/>
+<img src="./images/lense_clusters.png" width="600"/>
 
 - You may see the overview of the cluster as shown in the image below:
 
-<img src="./Images/lense_dashboard.png" width="600"/>
+<img src="./images/lense_dashboard.png" width="600"/>
 
 - You may also check workloads, services, networks and other created artifacts there. You may also watch the logs for specific pods in this IDE.
 
 - You may also check your deployments on Azure Portal which can look similar to the given image.
 
-<img src="./Images/workloads.png" width="600"/>
+<img src="./images/workloads.png" width="600"/>
 
 - To test deployments, you need to go `Services and Ingresses` option and select the service to test. You may see there the `External IP`. Using that IP and published port, you may test your deployed services. Some examples are given below:
 
-<img src="./Images/reancare.png" width="600"/>
+<img src="./images/reancare.png" width="600"/>
 
-<img src="./Images/careplan.png" width="600"/>
+<img src="./images/careplan.png" width="600"/>
 
-<img src="./Images/awards.png" width="600"/>
+<img src="./images/awards.png" width="600"/>
 
-<img src="./Images/followup.png" width="600"/>
+<img src="./images/followup.png" width="600"/>
 
-<img src="./Images/admin-portal-login.png" width="600"/>
+<img src="./images/admin-portal-login.png" width="600"/>
 
-<img src="./Images/admin_dashboard.png" width="600"/>
+<img src="./images/admin_dashboard.png" width="600"/>
 
 ---
 
