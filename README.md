@@ -19,4 +19,5 @@ Knowledgebase repository meant for documenting the
 * [Data Science](data-science/readme.md)
 * [Platform Engineering](platform-engineering/readme.md)
 * [NodeJS](nodejs-backend/README.md)
+* [Flutter](flutter/README.md)
 
