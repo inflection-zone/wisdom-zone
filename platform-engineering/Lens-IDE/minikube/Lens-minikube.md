@@ -21,13 +21,13 @@ Lens has been tested on the following platforms:
 1. Download the [Lens Desktop installer](https://k8slens.dev/) for Windows.
 2. Now run the `Lens-Setup-{version}.exe installer` to install Lens Desktop.
 3. Open Lens Desktop. Here you need to activate Lens. Choose Lens ID if you already have a Lens ID or need to create one. Alternatively, you can select Activation Code to proceed with an air-gapped installation, if you have already set up an activation code.
-    <img src="./Images/Lens-id.png" width="600" height="250"/>
+    <img src="./Images/lens-id.png" width="600" height="250"/>
      &nbsp;<br>
 4. Here are steps for new account creation on Lens:
     1. If you select Lens ID in previous step, on the next page, either log in or select **Create your Lens ID**. You will need to enter a username, password, and email. Alternatively, you can authenticate with a GitHub or Google account.
-    <img src="./Images/Lens-id-2.png" width="600" height="250"/>
+    <img src="./Images/lens-id-2.png" width="600" height="250"/>
      &nbsp;<br>
-    <img src="./Images/Lens-id-3.png" width="600" height="250"/>
+    <img src="./Images/lens-id-3.png" width="600" height="250"/>
      &nbsp;<br>
 
     2. Next, you need to verify your email, then select **Add Lens Subscription**.
