@@ -77,14 +77,17 @@ Lens has been tested on the following platforms:
      &nbsp;<br>
 
 * Now click on `Workloads` tab. You may see the list of workloads and overview. If you select `Overview`, you may see the total numbe of pods, deployments etc.
+  
     <img src="./Images/overview.png" width="600" height="280"/>
      &nbsp;<br>
 
 * You may check status and logs of these workloads one by one. Click on `Pods`. You will see the list of Pods deployed in cluster. If you want to check details of Pod, just click on it and lens will display all the details of that Pod.
+  
     <img src="./Images/Pods.png" width="600" height="280"/>
      &nbsp;<br>
 
 * In the right corner of details plane, you may see some icons like, pod shell, logs, edit, delete etc. Lens make it easy for us to check logs of pods, execute inside pod or edit pods manifest using these option in UI. Let's check logs of `nodeapp` pod. Click on `Pod Logs` icon. It will display logs of that paricular pod.
+  
     <img src="./Images/nodeapp-logs.png" width="600" height="280"/>
      &nbsp;<br>
 
