@@ -63,12 +63,12 @@ Lens has been tested on the following platforms:
 ### Deploy Workloads
 
 * In this tutorial, let's use `minikube` cluster. So select minikube from cluster's list. You may see the following screen.
-<img src="./Images/add-minikube.png" width="600" height="280"/>
+    <img src="./Images/add-minikube.png" width="600" height="280"/>
      &nbsp;<br>
 
 * Here you may all information about cluster like its nodes, workloads, configs etc. Terminal is also provided in lens. Let's deploy some workloads. We have already created [manifests](./manifests/).
 * To deploy these manifests, open terminal of lens and move to folder containing manifests.
-<img src="./Images/manifests.png" width="600" height="280"/>
+    <img src="./Images/manifests.png" width="600" height="280"/>
      &nbsp;<br>
 
 * Now to deploy these workloads on our minikube cluster, please run command ` kubectl apply -f . ` You may see the output that all workloads are created.
@@ -77,27 +77,27 @@ Lens has been tested on the following platforms:
      &nbsp;<br>
 
 * Now click on `Workloads` tab. You may see the list of workloads and overview. If you select `Overview`, you may see the total numbe of pods, deployments etc.
-<img src="./Images/overview.png" width="600" height="280"/>
+    <img src="./Images/overview.png" width="600" height="280"/>
      &nbsp;<br>
 
 * You may check status and logs of these workloads one by one. Click on `Pods`. You will see the list of Pods deployed in cluster. If you want to check details of Pod, just click on it and lens will display all the details of that Pod.
-<img src="./Images/Pods.png" width="600" height="280"/>
+    <img src="./Images/Pods.png" width="600" height="280"/>
      &nbsp;<br>
 
 * In the right corner of details plane, you may see some icons like, pod shell, logs, edit, delete etc. Lens make it easy for us to check logs of pods, execute inside pod or edit pods manifest using these option in UI. Let's check logs of `nodeapp` pod. Click on `Pod Logs` icon. It will display logs of that paricular pod.
-<img src="./Images/nodeapp-logs.png" width="600" height="280"/>
+    <img src="./Images/nodeapp-logs.png" width="600" height="280"/>
      &nbsp;<br>
 
 * In this way, you may check details and status of any workload you deployed.
 
 * In, `Network` section, you may see services and other network components listed. Click on `Services`. You may see the list of services running and their details.
 * Let's check `nginx` service. Select it, you will see the details of service.
-<img src="./Images/services.png" width="600" height="280"/>
+    <img src="./Images/services.png" width="600" height="280"/>
      &nbsp;<br>
 
 * Now if you want to `port forward` for this service, you may see the blue coloured tab `Forward` under `ports` section in details plane. Slect it and you will see a small pop-up screen, in which you have to mention port number to which you want to expose this service. Then click on start. It will redirect you to browser and you may see your service's index page in browser.
-<img src="./Images/port-forward.png" width="600" height="280"/>
+    <img src="./Images/port-forward.png" width="600" height="280"/>
      &nbsp;<br>
-<img src="./Images/output.png" width="600" height="280"/>
+    <img src="./Images/output.png" width="600" height="280"/>
     &nbsp;<br>
 
