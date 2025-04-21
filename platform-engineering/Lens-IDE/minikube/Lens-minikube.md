@@ -53,7 +53,8 @@ Lens has been tested on the following platforms:
      &nbsp;<br>
 
 * To add a new cluster to the catalog, hover over the blue plus icon in the lower right-hand corner of the screen. You will have the option to add a kubeconfig directly or by syncing with a file.
-<img src="./Images/lens-cluster-1.png" width="600" height="280"/>
+     <img src="./Images/lens-cluster-1.png" width="600" height="280"/>
+
      &nbsp;<br>
 
      <img src="./Images/add-from-kubeconfig.png" width="600" height="280"/>
